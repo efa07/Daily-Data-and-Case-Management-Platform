@@ -1,0 +1,26 @@
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+ 
+
+  /* Main Container */
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  
+  
+  /* Main Content */
+  main {
+    flex: 1;
+    padding: 20px;
+  }
+ 
+  
