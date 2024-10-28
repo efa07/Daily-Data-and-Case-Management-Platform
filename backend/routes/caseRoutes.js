@@ -13,5 +13,5 @@ router.post('/', (req, res) => {
   res.json({ message: 'Case created', case: { title, description } });
 });
 
-module.exports = router;
+export default router;
 

@@ -1,14 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db'); // Make sure this path is correct
-const app = express();
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import request from "request";
+import connectDB from "./config/db.js";
 
-// Load environment variables
 dotenv.config();
 
+const app = express();
+const PORT = process.env.PORT || 5000;
+const API_KEY = process.env.API_KEY;
+const url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&apikey=${API_KEY}`;
+
 // Connect to the database
-connectDB(); // Moved this to the beginning for clarity
+connectDB();
 
 // Middleware
 app.use(cors());
@@ -19,12 +23,15 @@ app.get('/', (req, res) => {
   res.send('Welcome to Comprehensive Data and Case Management API');
 });
 
-// Placeholder routes (will expand with actual logic later)
-const caseRoutes = require('./routes/caseRoutes');
-app.use('/api/cases', caseRoutes);
+// Financial Data route
+app.get('/api/financial-data', (req, res) => {
+  request.get({ url, json: true }, (err, _, data) => {
+    if (err) return res.status(500).send({ error: 'Failed to fetch data' });
+    res.send(data);
+    console.log("Data fetched successfully");
+  });
+});
 
-// Server configuration
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
