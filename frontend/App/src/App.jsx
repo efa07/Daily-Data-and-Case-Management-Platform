@@ -67,41 +67,44 @@ function App() {
         marginLeft: isSidebarOpen ? '250px' : '60px',
         flex: 1,
         transition: 'all 0.3s ease',
-        width: '100%'
+        width: '100%',
       }}>
         <React.Suspense fallback={<div>Loading...</div>}>
           <NavBar />
         </React.Suspense>
 
-        <Routes>
-          <Route path='login' element={<Login />} />
-          <Route path='about' element={
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <LazyAbout />
-            </React.Suspense>
-          } />
-          <Route path='contact' element={
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <LazyContact />
-            </React.Suspense>
-          } />
-          <Route path='services' element={
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <LazyService />
-            </React.Suspense>
-          } />
-          <Route path='financialchart' element={
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <LazyFinancialChart />
-            </React.Suspense>
-          } />
-          <Route path='/' element={<UserDashboard />} /> 
-          <Route path='*' element={
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <LazyNotFound />
-            </React.Suspense>
-          } />
-        </Routes>
+        <div style={{ marginBottom: "30px" }}>
+  <Routes>
+    <Route path='login' element={<Login />} />
+    <Route path='about' element={
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <LazyAbout />
+      </React.Suspense>
+    } />
+    <Route path='contact' element={
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <LazyContact />
+      </React.Suspense>
+    } />
+    <Route path='services' element={
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <LazyService />
+      </React.Suspense>
+    } />
+    <Route path='financialchart' element={
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <LazyFinancialChart />
+      </React.Suspense>
+    } />
+    <Route path='/' element={<UserDashboard />} /> 
+    <Route path='*' element={
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <LazyNotFound />
+      </React.Suspense>
+    } />
+  </Routes>
+</div>
+
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"npm run server --prefix backend\" \"npm start --prefix frontend\""
+    "start": "concurrently \"npm run server --prefix backend\" \"npm start --prefix frontend/App\""
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
