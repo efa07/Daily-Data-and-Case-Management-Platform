@@ -1,10 +1,9 @@
-// db.js (or your config file for MongoDB connection)
+// db.js
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      // Removed deprecated options
     });
     console.log('MongoDB Atlas connected');
   } catch (error) {

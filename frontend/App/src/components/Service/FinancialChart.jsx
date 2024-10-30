@@ -28,8 +28,8 @@ const FinancialChart = () => {
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '400px' }}>
-      <h2>EUR to USD Daily Closing Price</h2>
+    <div style={{ width: '100%', height: '100%' }}>
+      <h3>EUR to ETB Daily Closing Price</h3>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={chartData}

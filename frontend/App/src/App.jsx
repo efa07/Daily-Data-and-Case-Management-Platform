@@ -1,15 +1,14 @@
 import React from 'react';
 import NavBar from "./components/Nav/NavBar";
 const LazyContact = React.lazy(() => import("./pages/Contact"));
-const LazyService = React.lazy(() => import("./pages/Service/Service"));
 const LazyNotFound = React.lazy(() => import('./pages/NotFound'));
 const LazyAbout = React.lazy(() => import('./pages/About'));
 import Login from "./components/Login/Login";
 import UserDashboard from "./components/Dashboard/UserDashboard"
 import { Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
-const LazyFinancialChart = React.lazy(() => import("./pages/Service/FinancialChart"));
-
+const LazyFinancialChart = React.lazy(() => import("./components/Service/FinancialChart"));
+import StockChart from "./components/Service/StockChart";
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -53,9 +52,8 @@ function App() {
         {isSidebarOpen && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <a href="/" style={linkStyle}>Dashboard</a>
-            <a href="/about" style={linkStyle}>About</a>
-            <a href="/services" style={linkStyle}>Services</a>
-            <a href="/contact" style={linkStyle}>Contact</a>
+            <a href="/crypto" style={linkStyle}>Crypto</a>
+            <a href="/Commodi" style={linkStyle}>Contact</a>
             <a href="/financialchart" style={linkStyle}>Financial Chart</a>
             <a href="/login" style={linkStyle}>Login</a>
           </div>
@@ -86,11 +84,12 @@ function App() {
         <LazyContact />
       </React.Suspense>
     } />
-    <Route path='services' element={
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <LazyService />
-      </React.Suspense>
-    } />
+   <Route path='stock' element={
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <StockChart />
+    </React.Suspense>
+  } />
+   
     <Route path='financialchart' element={
       <React.Suspense fallback={<div>Loading...</div>}>
         <LazyFinancialChart />

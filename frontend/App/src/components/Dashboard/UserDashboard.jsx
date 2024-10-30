@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import FinancialChart from "../../pages/Service/FinancialChart"
+import FinancialChart from "../Service/FinancialChart";
+import { Grid, Box } from '@mui/material';
 import './UserDashboard.css';
+  import BitcoinChart from "../Service/Bitcoin";
+import StockChart from '../Service/StockChart';
 
 const UserDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [assets, setAssets] = useState([]); // This will hold market data
-  const [cases, setCases] = useState([]);   // This will hold case data
+  const [assets, setAssets] = useState([]);
+  const [cases, setCases] = useState([]);
 
-  // Dummy data for demonstration purposes
   const marketData = {
     stocks: { total: 5000, change: '+2%' },
     commodities: { total: 2000, change: '+1%' },
@@ -17,11 +19,9 @@ const UserDashboard = () => {
   const caseData = [
     { id: 1, name: 'Case A', status: 'Active', metrics: { priority: 'High', created: '2023-01-01' } },
     { id: 2, name: 'Case B', status: 'In Progress', metrics: { priority: 'Medium', created: '2023-02-01' } },
-    // Add more cases as needed
   ];
 
   const handleSearch = () => {
-    // Implement search logic here
     const filteredAssets = marketData.filter(asset =>
       asset.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -45,20 +45,33 @@ const UserDashboard = () => {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
+
       <div className="market-overview">
-        <h2>Market Overview</h2>
-        <ul>
-          <li><div className='market-fina'>
-      <FinancialChart />
+  <h2>Market Overview</h2>
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={4}>
+      <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
+        <FinancialChart />
 
-      </div></li>
-          <li>Commodities: {marketData.commodities.total} ({marketData.commodities.change})</li>
-          <li>Cryptocurrencies: {marketData.cryptocurrencies.total} ({marketData.cryptocurrencies.change})</li>
-        </ul>
-      </div>
+      </Box>
+    </Grid>
+    <Grid item xs={12} sm={4}>
+      <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
+        <h3>Commodities</h3>
 
-     
-      
+        <StockChart />
+        </Box>
+    </Grid>
+    <Grid item xs={12} sm={4}>
+      <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
+        <h3>Cryptocurrencies</h3>
+        <BitcoinChart />
+      </Box>
+    </Grid>
+  </Grid>
+</div>
+
+
       <div className="case-overview">
         <h2>Case Overview</h2>
         <table>
