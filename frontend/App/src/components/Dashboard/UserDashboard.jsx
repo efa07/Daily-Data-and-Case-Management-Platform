@@ -49,12 +49,16 @@ const UserDashboard = () => {
       <div className="market-overview">
   <h2>Market Overview</h2>
   <Grid container spacing={2}>
+    
+
     <Grid item xs={12} sm={4}>
       <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
+        <h3>Commodities</h3>
         <FinancialChart />
 
-      </Box>
+        </Box>
     </Grid>
+
     <Grid item xs={12} sm={4}>
       <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
         <h3>Commodities</h3>

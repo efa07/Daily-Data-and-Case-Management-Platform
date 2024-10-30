@@ -1,0 +1,141 @@
+/* financial.css */
+.financial-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #1a1a1a;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #6c5ce7;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+  
+  .search-button {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    background: #6c5ce7;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  
+  .search-button:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+  }
+  
+  .financial-card, .chart-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .financial-card h2 {
+    color: #1a1a1a;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .financial-details {
+    font-size: 1.1rem;
+    color: #4a4a4a;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .error {
+    color: #ff6b6b;
+    text-align: center;
+    padding: 1rem;
+    background: #fff5f5;
+    border-radius: 12px;
+    margin-top: 1rem;
+  }
+  
+  .loading {
+    text-align: center;
+    color: #3498db;
+    font-size: 1.2rem;
+    animation: pulse 1.5s infinite;
+  }
+  
+  /* Available Symbols */
+  .available-symbols h3 {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    color: #1a1a1a;
+  }
+  
+  .symbols-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .symbol-item {
+    padding: 0.5rem;
+    background: #f1f1f1;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  /* Pulse animation */
+  @keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .financial-container {
+      padding: 1rem;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    .financial-card, .chart-container {
+      padding: 1.5rem;
+    }
+  }
+  
+  

@@ -12,7 +12,7 @@ import {
     Legend,
     TimeScale,
 } from 'chart.js';
-// import "./financial.css";
+import "./financial.css";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, TimeScale);
 
