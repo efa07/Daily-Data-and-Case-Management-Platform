@@ -1,22 +1,22 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import request from "request";
-import axios from "axios"
+import axios from "axios";
 import connectDB from "./config/db.js";
 import FinancialData from "./models/FinancialData.js";
-import routes from "./routes/routes.js"
-import Commodity from "./models/Comodities.js"
+import Commodity from "./models/Comodities.js";
+import CryptoData from "./models/CryptoData.js";
+import StockData from "./models/StockData.js";
+import routes from "./routes/routes.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const API_KEY = process.env.API_KEY;
-const url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=ETB&apikey=${API_KEY}`;
 
-// Connect to the database
-connectDB();
+// Connect to the INSA database
+connectDB("INSA");
 
 // Middleware
 app.use(cors());
@@ -28,26 +28,22 @@ app.get('/', (req, res) => {
   res.send('Welcome to Comprehensive Data and Case Management API');
 });
 
-// Fetch and store financial data from API
-app.get('/api/financial-data', (req, res) => {
-  request.get({ url, json: true }, async (err, _, data) => {
-    if (err) return res.status(500).send({ error: 'Failed to fetch data' });
+// Financial data route - Fetch, store, and then retrieve from MongoDB
+app.get('/api/financial-data', async (req, res) => {
+  try {
+    const url = `https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=EUR&apikey=demo`;
+    const { data } = await axios.get(url);
 
-    try {
-      // Save the data to MongoDB
-      const financialData = new FinancialData({
-        symbol: 'EUR/ETB',
-        data: data,
-      });
-      await financialData.save();
+    // Save to FinancialData collection
+    const financialData = new FinancialData({ symbol: 'EUR/ETB', data });
+    await financialData.save();
 
-      res.send(data);
-      console.log("Data fetched and stored successfully");
-    } catch (saveError) {
-      console.error("Error saving data:", saveError);
-      res.status(500).send({ error: 'Failed to save data to MongoDB' });
-    }
-  });
+    res.send(data);
+    console.log("Financial data fetched and stored successfully");
+  } catch (error) {
+    console.error("Error fetching or saving data:", error);
+    res.status(500).send({ error: 'Failed to fetch or store data' });
+  }
 });
 
 // Retrieve stored financial data from MongoDB
@@ -55,45 +51,54 @@ app.get('/api/stored-financial-data', async (req, res) => {
   try {
     const storedData = await FinancialData.find({});
     res.send(storedData);
-  } catch (fetchError) {
-    console.error("Error retrieving data:", fetchError);
+  } catch (error) {
+    console.error("Error retrieving data:", error);
     res.status(500).send({ error: 'Failed to fetch stored data' });
   }
 });
 
-
-
-// Crypto data route
+// Crypto data route - Fetch, store, and then retrieve from MongoDB
 app.get('/api/bitcoin/market_chart', async (req, res) => {
   try {
-      const response = await axios.get('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1');
-      res.json(response.data);
+    const { data } = await axios.get('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1');
+
+    // Save to CryptoData collection
+    const cryptoData = new CryptoData({ symbol: 'BTC/USD', data });
+    await cryptoData.save();
+
+    res.json(data);
+    console.log("Bitcoin market chart data fetched and stored successfully");
   } catch (error) {
-      console.error(error);
-      res.status(500).send('Server Error');
+    console.error("Error fetching or storing Bitcoin data:", error);
+    res.status(500).send({ error: 'Failed to fetch or store data' });
   }
 });
-// Stock data route
-app.get('/api/stock', (req,res) => {
-  request.get({ url: `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo`, json: true }, (err, _, data) => {
-    if (err) return res.status(500).send({ error: 'Failed to fetch data' });
+
+// Stock data route - Fetch, store, and then retrieve from MongoDB
+app.get('/api/stock', async (req, res) => {
+  try {
+    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=${API_KEY}`;
+    const { data } = await axios.get(url);
+
+    // Save to StockData collection
+    const stockData = new StockData({ symbol: 'IBM', data });
+    await stockData.save();
+
     res.send(data);
-    console.log("Stock data fetched successfully");
-  });
+    console.log("Stock data fetched and stored successfully");
+  } catch (error) {
+    console.error("Error fetching or storing stock data:", error);
+    res.status(500).send({ error: 'Failed to fetch or store data' });
+  }
 });
 
-
-
+// Commodity data route - Fetch, store, and then retrieve from MongoDB
 app.get('/api/commodities/wti', async (req, res) => {
-  const apiKey = 'demo'; // Replace with your actual API key
-  const url = `https://www.alphavantage.co/query?function=WTI&interval=monthly&apikey=${apiKey}`;
+  const url = `https://www.alphavantage.co/query?function=ALL_COMMODITIES&interval=monthly&apikey=demo`;
 
   try {
-    // Fetch data from Alpha Vantage API
-    const response = await axios.get(url);
-    const apiData = response.data;
+    const { data: apiData } = await axios.get(url);
 
-    // Ensure data is in expected format
     if (!apiData['data'] || !Array.isArray(apiData['data'])) {
       return res.status(500).json({ error: 'Unexpected data format from API' });
     }
@@ -123,73 +128,6 @@ app.get('/api/commodities/wti', async (req, res) => {
   }
 });
 
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-// import express from "express";
-// import mongoose from "mongoose";
-// import axios from "axios";
-
-// const app = express();
-// app.use(cors());
-
-// const PORT = process.env.PORT || 5000;
-// // MongoDB connection
-// mongoose.connect('mongodb://localhost:27017/INSA', {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
-// .then(() => console.log('MongoDB connected'))
-// .catch(err => console.log(err));
-
-// // Define a schema and model
-// const dataSchema = new mongoose.Schema({
-//     date: String,
-//     value: Number,
-// });
-
-// const Data = mongoose.model('Data', dataSchema);
-
-// // Endpoint to fetch and store data
-// app.get('/fetch-data', async (req, res) => {
-//     try {
-//         const response = await axios.get('https://www.alphavantage.co/query?function=WTI&interval=monthly&apikey=demo');
-        
-//         // Check if the expected data exists
-//         if (!response.data || !Array.isArray(response.data.data)) {
-//             return res.status(400).json({ error: 'Invalid response from API' });
-//         }
-        
-//         const dataToStore = response.data.data.map(item => ({
-//             date: item.date,
-//             value: parseFloat(item.value), // Ensure value is a number
-//         }));
-
-//         // Store data in MongoDB
-//         await Data.deleteMany(); // Optional: clear previous data
-//         await Data.insertMany(dataToStore);
-
-//         res.status(200).json({ message: 'Data fetched and stored successfully' });
-//     } catch (error) {
-//         console.error('Error fetching data from Alpha Vantage:', error.message);
-//         res.status(500).json({ error: 'Failed to fetch and store data', details: error.message });
-//     }
-// });
-
-// // Endpoint to get data from MongoDB
-// app.get('/data', async (req, res) => {
-//     try {
-//         const data = await Data.find({});
-//         res.status(200).json(data);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Failed to retrieve data' });
-//     }
-// });
-
-// // Start the server
-// app.listen(PORT, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-// });

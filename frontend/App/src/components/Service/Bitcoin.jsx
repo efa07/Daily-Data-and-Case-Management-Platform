@@ -42,7 +42,7 @@ const BitcoinChart = () => {
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '500px' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <Line data={chartData} options={{
         responsive: true,
         plugins: {

@@ -14,21 +14,19 @@ const StockChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(
-                    'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo'
-                );
+                const response = await axios.get('http://localhost:5000/api/commodity-price-index');
 
-                // Extract time series data
-                const timeSeries = response.data['Time Series (Daily)'];
-                const labels = Object.keys(timeSeries).slice(0, 10); // Get the last 10 days
-                const closingPrices = labels.map(date => parseFloat(timeSeries[date]['4. close']));
+                // Extract data for the global price index
+                const indexData = response.data.data;
+                const labels = indexData.map(entry => entry.date).slice(0, 10).reverse(); // Last 10 dates
+                const values = indexData.map(entry => parseFloat(entry.value)).slice(0, 10).reverse(); // Last 10 values
 
                 setData({
-                    labels: labels.reverse(), // Reverse for chronological order
+                    labels,
                     datasets: [
                         {
-                            label: 'IBM Stock Price',
-                            data: closingPrices.reverse(), // Reverse for chronological order
+                            label: 'Global Price Index of All Commodities',
+                            data: values,
                             fill: false,
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             borderColor: 'rgba(75, 192, 192, 1)',
@@ -52,10 +50,11 @@ const StockChart = () => {
 
     return (
         <div>
-            <h2>IBM Daily Adjusted Stock Prices</h2>
-            <Line data={data} key={JSON.stringify(data)} />
+            <h2>Global Price Index of All Commodities (Monthly)</h2>
+            <Line data={data} />
         </div>
     );
 };
 
 export default StockChart;
+
