@@ -53,9 +53,8 @@ function App() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <a href="/" style={linkStyle}>Dashboard</a>
             <a href="/crypto" style={linkStyle}>Crypto</a>
-            <a href="/Commodi" style={linkStyle}>Contact</a>
+            <a href="/commodities:" style={linkStyle}>Commodities:</a>
             <a href="/financialchart" style={linkStyle}>Financial Chart</a>
-            <a href="/login" style={linkStyle}>Login</a>
           </div>
         )}
       </div>
