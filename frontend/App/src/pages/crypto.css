@@ -1,0 +1,179 @@
+/* crypto.css */
+.container {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.text-center {
+  text-align: center;
+  color: #1a1a1a;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #6c5ce7;
+  color: white;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: #5b4bc4;
+  transform: translateY(-2px);
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.card h2 {
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.card p {
+  color: #4a4a4a;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.chart-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
+}
+
+.text-danger {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 1rem;
+  background: #fff5f5;
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.loading {
+  text-align: center;
+  color: #6c5ce7;
+  font-size: 1.2rem;
+  animation: pulse 1.5s infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .text-center {
+    font-size: 2rem;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .chart-container {
+    padding: 1rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1a1a1a;
+  }
+
+  .container {
+    color: #e0e0e0;
+  }
+
+  .text-center {
+    color: #ffffff;
+  }
+
+  .form-control {
+    background: #2d2d2d;
+    border-color: #3d3d3d;
+    color: #ffffff;
+  }
+
+  .card {
+    background: #2d2d2d;
+  }
+
+  .card h2 {
+    color: #ffffff;
+  }
+
+  .card p {
+    color: #e0e0e0;
+  }
+
+  .chart-container {
+    background: #2d2d2d;
+  }
+}
+
+/* Utility Classes */
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.8rem;
+}

@@ -1,60 +1,46 @@
-// src/StockChart.jsx
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import axios from 'axios';
-
-// Register necessary components with ChartJS
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const StockChart = () => {
-    const [data, setData] = useState({});
-    const [loading, setLoading] = useState(true);
-    
+    const [datasets, setDatasets] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/commodity-price-index');
+                const response = await fetch('your-api-endpoint');
+                const result = await response.json();
 
-                // Extract data for the global price index
-                const indexData = response.data.data;
-                const labels = indexData.map(entry => entry.date).slice(0, 10).reverse(); // Last 10 dates
-                const values = indexData.map(entry => parseFloat(entry.value)).slice(0, 10).reverse(); // Last 10 values
+                if (!Array.isArray(result.data)) {
+                    throw new Error("Data is not an array");
+                }
 
-                setData({
-                    labels,
-                    datasets: [
-                        {
-                            label: 'Global Price Index of All Commodities',
-                            data: values,
-                            fill: false,
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 2,
-                        },
-                    ],
-                });
+                const chartData = result.data.map(item => ({
+                    x: new Date(item.date),
+                    y: parseFloat(item.value)
+                }));
+
+                setDatasets(chartData);
             } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false);
+                console.error("Error fetching data:", error);
             }
         };
 
         fetchData();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const data = {
+        datasets: [
+            {
+                label: 'Crude Oil Prices WTI',
+                data: datasets,
+                fill: false,
+                borderColor: 'rgba(75,192,192,1)',
+                tension: 0.1
+            }
+        ]
+    };
 
-    return (
-        <div>
-            <h2>Global Price Index of All Commodities (Monthly)</h2>
-            <Line data={data} />
-        </div>
-    );
+    return <Line data={data} />;
 };
 
 export default StockChart;
-

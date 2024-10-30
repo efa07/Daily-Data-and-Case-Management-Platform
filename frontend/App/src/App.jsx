@@ -9,6 +9,11 @@ import { Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
 const LazyFinancialChart = React.lazy(() => import("./components/Service/FinancialChart"));
 import StockChart from "./components/Service/StockChart";
+import CryptoCurrencyInfo from "./pages/CryptoPage";
+import CommodityInfo from "./pages/Commodity"
+import FinancialInfo from "./pages/Financialinfo"
+
+
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -53,7 +58,7 @@ function App() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <a href="/" style={linkStyle}>Dashboard</a>
             <a href="/crypto" style={linkStyle}>Crypto</a>
-            <a href="/commodities:" style={linkStyle}>Commodities:</a>
+            <a href="/commodities" style={linkStyle}>Commodities:</a>
             <a href="/financialchart" style={linkStyle}>Financial Chart</a>
           </div>
         )}
@@ -91,9 +96,22 @@ function App() {
    
     <Route path='financialchart' element={
       <React.Suspense fallback={<div>Loading...</div>}>
-        <LazyFinancialChart />
+        <FinancialInfo/>
       </React.Suspense>
     } />
+
+    <Route path='crypto' element={
+      <React.Suspense fallback={<div>Loading...</div>}>
+       <CryptoCurrencyInfo />
+      </React.Suspense>
+    } />
+
+    <Route path='commodities' element={
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <CommodityInfo />
+      </React.Suspense>
+    } />
+
     <Route path='/' element={<UserDashboard />} /> 
     <Route path='*' element={
       <React.Suspense fallback={<div>Loading...</div>}>

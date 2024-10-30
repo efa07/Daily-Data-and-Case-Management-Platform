@@ -7,7 +7,6 @@ import FinancialData from "./models/FinancialData.js";
 import Commodity from "./models/Comodities.js";
 import CryptoData from "./models/CryptoData.js";
 import StockData from "./models/StockData.js";
-import routes from "./routes/routes.js";
 
 dotenv.config();
 
@@ -21,11 +20,43 @@ connectDB("INSA");
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(routes);
 
 // Sample route for the API
 app.get('/', (req, res) => {
   res.send('Welcome to Comprehensive Data and Case Management API');
+});
+
+app.get('/api/financial/:symbol', async (req, res) => {
+  const { symbol } = req.params;
+
+  try {
+      const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`);
+      console.log(response.data);  // Log the API response data here for inspection
+      
+      const data = response.data;
+
+      // Check if the data structure is valid
+      if (!data.chart || !data.chart.result || data.chart.result.length === 0) {
+          return res.status(404).json({ error: 'Stock not found or invalid data structure' });
+      }
+
+      const result = data.chart.result[0];
+
+      if (!result.indicators || !result.indicators.quote || result.indicators.quote.length === 0) {
+          return res.status(404).json({ error: 'No price data available for this stock' });
+      }
+
+      const stockData = {
+          timestamp: result.timestamp,
+          closePrices: result.indicators.quote[0].close,
+          symbol: symbol,
+      };
+
+      res.json(stockData);
+  } catch (error) {
+      console.error("Error fetching stock data:", error.message);
+      res.status(500).json({ error: 'Error fetching stock data' });
+  }
 });
 
 // Financial data route - Fetch, store, and then retrieve from MongoDB
@@ -92,39 +123,50 @@ app.get('/api/stock', async (req, res) => {
   }
 });
 
-// Commodity data route - Fetch, store, and then retrieve from MongoDB
-app.get('/api/commodities/wti', async (req, res) => {
-  const url = `https://www.alphavantage.co/query?function=ALL_COMMODITIES&interval=monthly&apikey=demo`;
+// // Commodity data route - Fetch, store, and then retrieve from MongoDB
+// app.get('/api/commodities/wti', async (req, res) => {
+//   const url = `https://www.alphavantage.co/query?function=ALL_COMMODITIES&interval=monthly&apikey=demo`;
 
+//   try {
+//     const { data: apiData } = await axios.get(url);
+
+//     if (!apiData['data'] || !Array.isArray(apiData['data'])) {
+//       return res.status(500).json({ error: 'Unexpected data format from API' });
+//     }
+
+//     // Format the data for MongoDB schema
+//     const formattedData = {
+//       name: 'Crude Oil Prices WTI',
+//       interval: 'monthly',
+//       unit: 'dollars per barrel',
+//       data: apiData['data'].map(entry => ({
+//         date: new Date(entry['date']),
+//         value: parseFloat(entry['value']),
+//       })),
+//     };
+
+//     // Store or update commodity data in MongoDB
+//     const result = await Commodity.findOneAndUpdate(
+//       { name: 'Crude Oil Prices WTI', interval: 'monthly' },
+//       formattedData,
+//       { upsert: true, new: true }
+//     );
+
+//     res.status(200).json({ message: 'Data successfully stored', data: result });
+//   } catch (error) {
+//     console.error('Error fetching or storing data:', error);
+//     res.status(500).json({ error: 'Failed to fetch and store data' });
+//   }
+// });
+
+app.get('/api/commodity/:symbol', async (req, res) => {
+  const symbol = req.params.symbol;
   try {
-    const { data: apiData } = await axios.get(url);
-
-    if (!apiData['data'] || !Array.isArray(apiData['data'])) {
-      return res.status(500).json({ error: 'Unexpected data format from API' });
-    }
-
-    // Format the data for MongoDB schema
-    const formattedData = {
-      name: 'Crude Oil Prices WTI',
-      interval: 'monthly',
-      unit: 'dollars per barrel',
-      data: apiData['data'].map(entry => ({
-        date: new Date(entry['date']),
-        value: parseFloat(entry['value']),
-      })),
-    };
-
-    // Store or update commodity data in MongoDB
-    const result = await Commodity.findOneAndUpdate(
-      { name: 'Crude Oil Prices WTI', interval: 'monthly' },
-      formattedData,
-      { upsert: true, new: true }
-    );
-
-    res.status(200).json({ message: 'Data successfully stored', data: result });
+      const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=30d&interval=1d`);
+      res.json(response.data);
   } catch (error) {
-    console.error('Error fetching or storing data:', error);
-    res.status(500).json({ error: 'Failed to fetch and store data' });
+      console.error("Error fetching data:", error);
+      res.status(500).json({ error: 'Error fetching data from Yahoo Finance' });
   }
 });
 
