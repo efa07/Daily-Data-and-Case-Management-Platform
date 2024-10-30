@@ -1,0 +1,51 @@
+.case-management {
+    max-width: 800px;
+    margin: auto;
+    color: #fff;
+    padding: 20px;
+  }
+  
+  .case-list {
+    margin-bottom: 30px;
+  }
+  
+  .case-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .case-item h4 {
+    margin: 0;
+  }
+  
+  .case-form {
+    border-top: 2px solid #333;
+    padding-top: 20px;
+  }
+  
+  .case-form input,
+  .case-form select,
+  .case-form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  .case-form button {
+    padding: 10px;
+    margin-right: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .case-form button:last-child {
+    background-color: #dc3545;
+  }
+  

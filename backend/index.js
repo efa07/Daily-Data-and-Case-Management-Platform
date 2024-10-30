@@ -7,6 +7,8 @@ import FinancialData from "./models/FinancialData.js";
 import Commodity from "./models/Comodities.js";
 import CryptoData from "./models/CryptoData.js";
 import StockData from "./models/StockData.js";
+import caseRoutes from './routes/caseRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -20,12 +22,13 @@ connectDB("INSA");
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/api/cases', caseRoutes);
+app.use('/api/users', userRoutes); // Use user routes
 
 // Sample route for the API
 app.get('/', (req, res) => {
   res.send('Welcome to Comprehensive Data and Case Management API');
 });
-
 app.get('/api/financial/:symbol', async (req, res) => {
   const { symbol } = req.params;
 
@@ -158,6 +161,7 @@ app.get('/api/stock', async (req, res) => {
 //     res.status(500).json({ error: 'Failed to fetch and store data' });
 //   }
 // });
+
 
 app.get('/api/commodity/:symbol', async (req, res) => {
   const symbol = req.params.symbol;

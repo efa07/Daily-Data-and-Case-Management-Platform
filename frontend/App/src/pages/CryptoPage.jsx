@@ -13,7 +13,7 @@ import {
     TimeScale,
 } from 'chart.js';
 import "./crypto.css"
-// Register Chart.js components
+// register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, TimeScale);
 
 const CryptoCurrencyInfo = () => {
@@ -21,11 +21,11 @@ const CryptoCurrencyInfo = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null); // Error state
+    const [error, setError] = useState(null);
 
     const fetchCoinData = async (coin) => {
         setLoading(true);
-        setError(null); // Reset error state
+        setError(null); 
         try {
             const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets`, {
                 params: {
@@ -44,7 +44,7 @@ const CryptoCurrencyInfo = () => {
             fetchChartData(coin);
         } catch (error) {
             console.error("Error fetching coin data:", error);
-            setError(error.message); // Set error message
+            setError(error.message); 
         } finally {
             setLoading(false);
         }

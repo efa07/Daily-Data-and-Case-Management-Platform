@@ -12,7 +12,9 @@ import StockChart from "./components/Service/StockChart";
 import CryptoCurrencyInfo from "./pages/CryptoPage";
 import CommodityInfo from "./pages/Commodity"
 import FinancialInfo from "./pages/Financialinfo"
-
+import { colors } from '@mui/material';
+import CaseManagement from './pages/CaseManagement'
+import Signup from "./pages/Singup"
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -22,12 +24,13 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ display: 'flex' }}>
+    <div className="App" style={{ display: 'flex'}}>
       {/* Sidebar */}
       <div 
         style={{
           width: isSidebarOpen ? '250px' : '60px',
           height: '100vh',
+          borderRight: '1px solid #6c5ce7',
           backgroundColor: '#1a1a1a',
           transition: 'all 0.3s ease',
           position: 'fixed',
@@ -39,7 +42,7 @@ function App() {
           zIndex: 1000
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '2rem',borderRight:"1px solid #6c5ce7" }}>
           <button 
             onClick={toggleSidebar}
             style={{
@@ -47,7 +50,8 @@ function App() {
               border: 'none',
               color: 'white',
               cursor: 'pointer',
-              fontSize: '1.5rem'
+              fontSize: '1.5rem',
+              borderRight: '1px solid #6c5ce7'
             }}
           >
             {isSidebarOpen ? '←' : '→'}
@@ -60,6 +64,7 @@ function App() {
             <a href="/crypto" style={linkStyle}>Crypto</a>
             <a href="/commodities" style={linkStyle}>Commodities:</a>
             <a href="/financialchart" style={linkStyle}>Financial Chart</a>
+            <a href='/case' style={linkStyle}>Case Mangement</a>
           </div>
         )}
       </div>
@@ -71,10 +76,10 @@ function App() {
         transition: 'all 0.3s ease',
         width: '100%',
       }}>
+        
         <React.Suspense fallback={<div>Loading...</div>}>
           <NavBar />
         </React.Suspense>
-
         <div style={{ marginBottom: "30px" }}>
   <Routes>
     <Route path='login' element={<Login />} />
@@ -88,6 +93,17 @@ function App() {
         <LazyContact />
       </React.Suspense>
     } />
+
+    <Route path='signup' element={
+      <Signup />
+    } />
+
+<Route path='case' element={
+  <React.Suspense fallback={<div>Loading...</div>}>
+    <CaseManagement />
+  </React.Suspense>
+} />
+
    <Route path='stock' element={
     <React.Suspense fallback={<div>Loading...</div>}>
       <StockChart />
@@ -129,11 +145,11 @@ function App() {
 const linkStyle = {
   color: 'white',
   textDecoration: 'none',
-  padding: '0.5rem',
+  padding: '0.8rem',
+  fontSize: '1.3rem',
   borderRadius: '4px',
   transition: 'background-color 0.3s ease',
   ':hover': {
-    backgroundColor: 'rgba(255,255,255,0.1)'
   }
 };
 

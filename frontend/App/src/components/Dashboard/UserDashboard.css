@@ -8,12 +8,17 @@
 
 .user-dashboard h1 {
   text-align: center;
-  color: #1a1a1a;
+  color: white;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
 }
-
+th {
+  color: #333;
+}
+td {
+  color: #fff;
+}
 .search-bar {
   display: flex;
   justify-content: center;
@@ -59,7 +64,7 @@
 
 .market-overview h2,
 .case-overview h2 {
-  color: #1a1a1a;
+  color: whitesmoke;
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
@@ -67,7 +72,6 @@
 .grid-item {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
 }
 

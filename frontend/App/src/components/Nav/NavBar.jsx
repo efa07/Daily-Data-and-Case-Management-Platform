@@ -23,7 +23,7 @@ const NavBar = () => {
             </div>
             <ul className="navbar-links">
                 <li>
-                    <Link to="/" className={isActive('/home') ? 'active-link' : 'nav-link'}>Home</Link>
+                    <Link to="/" className={isActive('/') ? 'active-link' : 'nav-link'}>Home</Link>
                 </li>
                 <li>
                     <Link to="/about" className={isActive('/about') ? 'active-link' : 'nav-link'}>About</Link>
