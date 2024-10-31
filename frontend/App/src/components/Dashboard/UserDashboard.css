@@ -64,11 +64,12 @@ td {
 
 .market-overview h2,
 .case-overview h2 {
-  color: whitesmoke;
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
-
+.mh2{
+  color: #f1f1f1;
+}
 .grid-item {
   background: white;
   border-radius: 16px;

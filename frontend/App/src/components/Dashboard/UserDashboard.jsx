@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import FinancialChart from "../Service/FinancialChart";
-import { Grid, Box } from '@mui/material';
+import FinancialChart from "../Service/ExchangeRateChart";
+import { Grid, Box, colors } from '@mui/material';
 import './UserDashboard.css';
 import BitcoinChart from "../Service/Bitcoin";
-import StockChart from '../Service/StockChart';
+import CoffeeChart from '../Service/CoffeeChart';
 
 const UserDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -60,24 +60,21 @@ const UserDashboard = () => {
       </div>
 
       <div className="market-overview">
-        <h2>Market Overview</h2>
+        <h2 className='mh2'>Market Overview</h2>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
-              <h3>Commodities</h3>
               <FinancialChart />
             </Box>
           </Grid>
 
           <Grid item xs={12} sm={4}>
             <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
-              <h3>Stocks</h3>
-              <StockChart />
+              <CoffeeChart />
             </Box>
           </Grid>
           <Grid item xs={12} sm={4}>
             <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
-              <h3>Cryptocurrencies</h3>
               <BitcoinChart />
             </Box>
           </Grid>
@@ -85,7 +82,7 @@ const UserDashboard = () => {
       </div>
 
       <div className="case-overview">
-        <h2>Case Overview</h2>
+        <h2 className='mh2'>Case Overview</h2>
         <table>
           <thead>
             <tr>

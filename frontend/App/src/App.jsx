@@ -1,114 +1,135 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from "./components/Nav/NavBar";
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+
 const LazyContact = React.lazy(() => import("./pages/Contact"));
 const LazyNotFound = React.lazy(() => import('./pages/NotFound'));
 const LazyAbout = React.lazy(() => import('./pages/About'));
 import Login from "./components/Login/Login";
-import UserDashboard from "./components/Dashboard/UserDashboard"
-import { Route, Routes } from 'react-router-dom';
-import StockChart from "./components/Service/StockChart";
+import UserDashboard from "./components/Dashboard/UserDashboard";
+import CoffeeChart from "./components/Service/CoffeeChart";
 import CryptoCurrencyInfo from "./pages/CryptoPage";
-import CommodityInfo from "./pages/Commodity"
-import FinancialInfo from "./pages/Financialinfo"
-import CaseManagement from './pages/CaseManagement'
-import Signup from "./pages/Singup"
-import "./app.css"
+import CommodityInfo from "./pages/Commodity";
+import FinancialInfo from "./pages/Financialinfo";
+import CaseManagement from './pages/CaseManagement';
+import Signup from "./pages/Singup";
+import ProtectedRoute from './components/Auth/ProtectedRoute';
+import "./app.css";
+
 function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
+  const isNotFoundRoute = location.pathname === '*' || !([
+    '/', '/about', '/contact', '/case', '/stock', 
+    '/financialchart', '/crypto', '/commodities',
+    '/login', '/signup'
+  ].includes(location.pathname));
+  
+  const shouldHideNav = isAuthRoute || isNotFoundRoute;
+  const [token] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    if (location.pathname === '/' && !token) {
+      navigate('/login');
+    }
+  }, [location.pathname, token, navigate]);
+
   return (
-    <div className="App" style={{ display: 'flex'}}>
+    <div className="App" style={{ display: 'flex' }}>
       {/* Sidebar */}
-      <div 
-        className="sidebar"
-      >
-        <div className="sidebar-toggle">
-          <button 
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'white',
-              cursor: 'pointer',
-              fontSize: '1.5rem',
-            }}>
-            {'←'}
-          </button>
+      {!shouldHideNav && (
+        <div className="sidebar">
+          <div className="sidebar-toggle">
+            <button 
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '1.5rem',
+              }}>
+              {'←'} 
+            </button>
+          </div>
+          
+          <div className="sidebar-links">
+            <a href="/" style={linkStyle}>Dashboard</a>
+            <a href="/crypto" style={linkStyle}>Crypto</a>
+            <a href="/commodities" style={linkStyle}>Commodities</a>
+            <a href="/financialchart" style={linkStyle}>Financial Chart</a>
+            <a href='/case' style={linkStyle}>Case Management</a>
+          </div>
         </div>
-        
-        <div className="sidebar-links">
-          <a href="/" style={linkStyle}>Dashboard</a>
-          <a href="/crypto" style={linkStyle}>Crypto</a>
-          <a href="/commodities" style={linkStyle}>Commodities</a>
-          <a href="/financialchart" style={linkStyle}>Financial Chart</a>
-          <a href='/case' style={linkStyle}>Case Management</a>
-        </div>
-      </div>
+      )}
 
       {/* Main Content */}
       <div style={{ 
-        marginLeft: '60px',
+        marginLeft: shouldHideNav ? '0' : '60px',
         flex: 1,
         transition: 'all 0.3s ease',
         width: '100vw',
       }}>
         
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <NavBar />
-        </React.Suspense>
-        <div style={{ marginBottom: "30px" }}>
+        {/* Only render NavBar if not on auth routes or unknown routes */}
+        {!shouldHideNav && <NavBar />}
+        
           <Routes>
+          
             <Route path='login' element={<Login />} />
-            <Route path='about' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <LazyAbout />
-              </React.Suspense>
-            } />
-            <Route path='contact' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <LazyContact />
-              </React.Suspense>
-            } />
-
             <Route path='signup' element={<Signup />} />
-
-            <Route path='case' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <CaseManagement />
-              </React.Suspense>
-            } />
-
-            <Route path='stock' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <StockChart />
-              </React.Suspense>
-            } />
-             
-            <Route path='financialchart' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <FinancialInfo/>
-              </React.Suspense>
-            } />
-
-            <Route path='crypto' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <CryptoCurrencyInfo />
-              </React.Suspense>
-            } />
-
-            <Route path='commodities' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <CommodityInfo />
-              </React.Suspense>
-            } />
-
-            <Route path='/' element={<UserDashboard />} /> 
+            
+            {/* Wrap protected routes inside a single Route */}
+            <Route element={<ProtectedRoute />}>
+            
+            <Route path='/' element={<UserDashboard />} />
+              <Route path='about' element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <LazyAbout />
+                </React.Suspense>
+              } />
+              <Route path='contact' element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <LazyContact />
+                </React.Suspense>
+              } />
+              <Route path='case' element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <CaseManagement />
+                </React.Suspense>
+              } />
+              <Route path='stock' element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <CoffeeChart />
+                </React.Suspense>
+              } />
+              <Route path='financialchart' element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <FinancialInfo />
+                </React.Suspense>
+              } />
+              <Route path='crypto' element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <CryptoCurrencyInfo />
+                </React.Suspense>
+              } />
+              <Route path='commodities' element={
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <CommodityInfo />
+                </React.Suspense>
+              } />
+              
+            </Route>
+            
             <Route path='*' element={
               <React.Suspense fallback={<div>Loading...</div>}>
                 <LazyNotFound />
               </React.Suspense>
             } />
           </Routes>
+
         </div>
       </div>
-    </div>
   );
 }
 
@@ -120,7 +141,5 @@ const linkStyle = {
   borderRadius: '4px',
   transition: 'background-color 0.3s ease',
 };
-
-
 
 export default App;

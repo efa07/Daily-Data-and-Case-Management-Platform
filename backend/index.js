@@ -3,14 +3,16 @@ import cors from "cors";
 import dotenv from "dotenv";
 import axios from "axios";
 import connectDB from "./config/db.js";
-import FinancialData from "./models/FinancialData.js";
 import CryptoData from "./models/CryptoData.js";
 import StockData from "./models/StockData.js";
 import caseRoutes from './routes/caseRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import { createClient } from 'redis';
-import Commodity from './models/Comodities.js';
-
+import CoffeeData from './models/CoffeeData.js';
+import ExchangeRate from './models/ExchangeRate.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import User from "./models/userModel.js";
 
 // Load environment variables
 dotenv.config();
@@ -39,6 +41,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/cases', caseRoutes);
 app.use('/api/users', userRoutes);
+
 
 // Sample route for the API
 app.get('/', (req, res) => {
@@ -88,33 +91,7 @@ app.get('/api/financial/:symbol', async (req, res) => {
   }
 });
 
-// Financial data route - Fetch, store, and retrieve from MongoDB
-app.get('/api/financial-data', async (req, res) => {
-  try {
-    const url = `https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=EUR&apikey=${API_KEY}`;
-    const { data } = await axios.get(url);
 
-    const financialData = new FinancialData({ symbol: 'EUR/ETB', data });
-    await financialData.save();
-
-    res.send(data);
-    console.log("Financial data fetched and stored successfully");
-  } catch (error) {
-    console.error("Error fetching or saving data:", error);
-    res.status(500).send({ error: 'Failed to fetch or store data' });
-  }
-});
-
-// Retrieve stored financial data from MongoDB
-app.get('/api/stored-financial-data', async (req, res) => {
-  try {
-    const storedData = await FinancialData.find({});
-    res.send(storedData);
-  } catch (error) {
-    console.error("Error retrieving data:", error);
-    res.status(500).send({ error: 'Failed to fetch stored data' });
-  }
-});
 
 // Crypto data route - Fetch, store, and retrieve from MongoDB
 app.get('/api/bitcoin/market_chart', async (req, res) => {
@@ -175,6 +152,92 @@ app.get('/api/commodity/:symbol', async (req, res) => {
     res.status(500).json({ error: 'Error fetching data from Yahoo Finance' });
   }
 });
+
+
+app.get('/api/fetch-coffee-data', async (req, res) => {
+  try {
+    const response = await axios.get('https://www.alphavantage.co/query?function=COFFEE&interval=monthly&apikey=demo');
+    
+    const coffeeDataArray = response.data.data; // Access the data field directly from the response
+
+    // Save each coffee data point to MongoDB
+    const coffeeDataDocuments = coffeeDataArray.map(item => ({
+      date: item.date,
+      value: parseFloat(item.value), // Ensure value is a number
+    }));
+
+    await CoffeeData.insertMany(coffeeDataDocuments); // Insert data into MongoDB
+    res.status(200).json(coffeeDataDocuments); // Send back the saved data
+  } catch (error) {
+    console.error('Error fetching coffee data:', error);
+    res.status(500).json({ error: 'Failed to fetch coffee data' });
+  }
+});
+
+// Fetch stored coffee data
+app.get('/api/coffee-data', async (req, res) => {
+  try {
+    // Check cache first
+    const cachedData = await client.get('coffeeData');
+
+    if (cachedData) {
+      console.log("Coffee data retrieved from Redis cache");
+      return res.status(200).json(JSON.parse(cachedData)); // Return cached data
+    }
+
+    // Fetch from MongoDB if not cached
+    const coffeeData = await CoffeeData.find({});
+    // Store fetched data in cache
+    await client.setEx('coffeeData', 3600, JSON.stringify(coffeeData)); // Cache for 1 hour
+
+    res.status(200).json(coffeeData);
+  } catch (error) {
+    console.error('Error fetching coffee data from MongoDB:', error);
+    res.status(500).json({ error: 'Failed to fetch coffee data' });
+  }
+});
+
+
+// Exchange Rate data route - Fetch, store, and retrieve exchange rates
+app.get('/api/exchange-rate', async (req, res) => {
+  try {
+    // Check if data is in Redis cache
+    const cachedData = await client.get('exchangeRateData');
+
+    if (cachedData) {
+      console.log("Exchange rate data retrieved from Redis cache");
+      return res.json(JSON.parse(cachedData));
+    }
+
+    // Fetch from Alpha Vantage API if not in cache
+    const response = await axios.get('https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&outputsize=full&apikey=demo');
+    
+    // Extract time series data
+    const exchangeRateData = response.data["Time Series FX (Daily)"];
+    
+    // Format the data for MongoDB and easier consumption in the frontend
+    const formattedData = Object.keys(exchangeRateData).map(date => ({
+      date,
+      open: parseFloat(exchangeRateData[date]["1. open"]),
+      high: parseFloat(exchangeRateData[date]["2. high"]),
+      low: parseFloat(exchangeRateData[date]["3. low"]),
+      close: parseFloat(exchangeRateData[date]["4. close"]),
+    }));
+
+    // Save formatted data to MongoDB
+    await ExchangeRate.insertMany(formattedData);
+
+    // Cache the result in Redis
+    await client.setEx('exchangeRateData', 3600, JSON.stringify(formattedData)); // Cache for 1 hour
+
+    res.json(formattedData);
+    console.log("Exchange rate data fetched and stored successfully");
+  } catch (error) {
+    console.error("Error fetching exchange rate data:", error);
+    res.status(500).json({ error: 'Failed to fetch exchange rate data' });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

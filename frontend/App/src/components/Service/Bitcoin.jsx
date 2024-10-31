@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend } from 'chart.js';
+import "./bitcon.css"
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
@@ -43,22 +44,7 @@ const BitcoinChart = () => {
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <Line data={chartData} options={{
-        responsive: true,
-        plugins: {
-          legend: { display: true },
-        },
-        scales: {
-          x: {
-            type: 'category',
-            title: { display: true, text: 'Time' },
-          },
-          y: {
-            title: { display: true, text: 'Price (USD)' },
-            beginAtZero: false,
-          },
-        },
-      }} />
+      <Line data={chartData}  />
     </div>
   );
 };

@@ -6,6 +6,11 @@ const router = express.Router();
 // Create a new case
 router.post('/', async (req, res) => {
     try {
+        // Convert assignedTo to ObjectId if it is a valid string
+        if (req.body.assignedTo && mongoose.Types.ObjectId.isValid(req.body.assignedTo)) {
+            req.body.assignedTo = mongoose.Types.ObjectId(req.body.assignedTo);
+        }
+
         const newCase = new Case(req.body);
         const savedCase = await newCase.save();
         res.status(201).json(savedCase);

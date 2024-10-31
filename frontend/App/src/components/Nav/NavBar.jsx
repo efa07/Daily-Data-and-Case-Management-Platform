@@ -1,22 +1,25 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './NavBar.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const NavBar = () => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     // Function to determine if a link is active
     const isActive = (path) => {
         return location.pathname === path;
     };
 
-    // Handle logout functionality
     const handleLogout = () => {
-        // Perform logout logic here (e.g., clearing session, redirecting)
-        console.log("Logged out");
+        localStorage.removeItem('user');
+        navigate('/login');
     };
 
     return (
+
         <nav className="navbar">
             <div className="navbar-logo">
                 <Link to="/" className={isActive('/') ? 'active-link' : 'nav-link'}>MyApp</Link>

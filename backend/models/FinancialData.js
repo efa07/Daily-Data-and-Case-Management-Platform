@@ -9,3 +9,5 @@ const financialDataSchema = new mongoose.Schema({
 
 const FinancialData = mongoose.model('FinancialData', financialDataSchema);
 export default FinancialData;
+
+
