@@ -31,4 +31,4 @@ const commoditySchema = new mongoose.Schema({
 // Create the model
 const Commodity = mongoose.model('Commodity', commoditySchema);
 
-export default Commodity; // Export the model for use in other files
+export default Commodity; 

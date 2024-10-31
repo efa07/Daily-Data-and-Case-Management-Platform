@@ -91,8 +91,8 @@ const CaseManagement = () => {
               <p>Status: {caseItem.status}</p>
               <p>Assigned To: {caseItem.assignedTo ? caseItem.assignedTo : 'N/A'}</p>
               <p>Due Date: {caseItem.dueDate ? new Date(caseItem.dueDate).toLocaleDateString() : 'N/A'}</p>
-              <button onClick={() => handleEdit(caseItem)}>Edit</button>
-              <button onClick={() => handleDelete(caseItem._id)}>Delete</button>
+              <button onClick={() => handleEdit(caseItem)} className='edit'>Edit</button>
+              <button onClick={() => handleDelete(caseItem._id)} className='delete'>Delete</button>
             </div>
           ))
         ) : (
