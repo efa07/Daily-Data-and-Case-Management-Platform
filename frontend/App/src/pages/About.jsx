@@ -6,15 +6,11 @@ const About = () => {
         <div className={styles.container} style={{ padding: '20px' }}>
             <h1>About Us</h1>
             <p>
-                Welcome to the Daily Data and Case Management Platform. Our mission is to provide
-                efficient and effective solutions for managing daily data and cases. We strive to
-                offer the best tools and resources to help you stay organized and productive.
+                Welcome to the Currency Exchange Rate Service! Our service provides the latest exchange rates for various currencies. You can use our service to get the current exchange rate between two currencies, as well as historical exchange rate data.
             </p>
             <h2>Our Team</h2>
             <p>
-                Our team is composed of experienced professionals dedicated to delivering high-quality
-                software solutions. We are passionate about technology and committed to continuous
-                improvement.
+                I am Efa Tariku, a full-stack developer and Medical Lab student with a passion for creating innovative
             </p>
             <h2>Contact Us</h2>
             <p>

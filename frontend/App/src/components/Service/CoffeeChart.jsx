@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import axios from 'axios';
-import "./coffee.css"
+import "./coffee.css";
 
 const CoffeeChart = () => {
   const [coffeeData, setCoffeeData] = useState([]);
@@ -29,8 +29,10 @@ const CoffeeChart = () => {
         label: 'Coffee Prices (cents per pound)',
         data: coffeeData.map(item => item.value),
         fill: false,
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.4)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1, // Set this to a lower value for a thinner line
+        tension: 0.3, // Optional: add curvature to the line
       },
     ],
   };

@@ -13,6 +13,8 @@ import ExchangeRate from './models/ExchangeRate.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from "./models/userModel.js";
+import mongoose from 'mongoose';
+
 
 // Load environment variables
 dotenv.config();
@@ -34,7 +36,7 @@ client.on('error', (err) => console.error('Redis Client Error:', err));
 await client.connect();
 
 // Connect to the INSA database
-connectDB("INSA");
+connectDB();
 
 // Middleware
 app.use(cors());
@@ -197,46 +199,56 @@ app.get('/api/coffee-data', async (req, res) => {
   }
 });
 
-
-// Exchange Rate data route - Fetch, store, and retrieve exchange rates
-app.get('/api/exchange-rate', async (req, res) => {
+// Exchange Rate Data Route
+app.get('/api/exchange-rate/EUR/USD', async (req, res) => {
   try {
-    // Check if data is in Redis cache
-    const cachedData = await client.get('exchangeRateData');
+      // Check if data is in cache
+      const cachedData = await client.get('EUR/USD');
 
-    if (cachedData) {
-      console.log("Exchange rate data retrieved from Redis cache");
-      return res.json(JSON.parse(cachedData));
-    }
+      if (cachedData) {
+          console.log("Exchange rate data retrieved from Redis cache");
+          return res.json(JSON.parse(cachedData));
+      }
 
-    // Fetch from Alpha Vantage API if not in cache
-    const response = await axios.get('https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&outputsize=full&apikey=demo');
-    
-    // Extract time series data
-    const exchangeRateData = response.data["Time Series FX (Daily)"];
-    
-    // Format the data for MongoDB and easier consumption in the frontend
-    const formattedData = Object.keys(exchangeRateData).map(date => ({
-      date,
-      open: parseFloat(exchangeRateData[date]["1. open"]),
-      high: parseFloat(exchangeRateData[date]["2. high"]),
-      low: parseFloat(exchangeRateData[date]["3. low"]),
-      close: parseFloat(exchangeRateData[date]["4. close"]),
-    }));
+      // Fetch data from Alpha Vantage API
+      const response = await axios.get(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&apikey=${API_KEY}`);
+      const timeSeries = response.data['Time Series FX (Daily)'];
 
-    // Save formatted data to MongoDB
-    await ExchangeRate.insertMany(formattedData);
+      // Validate data structure
+      if (!timeSeries) {
+          return res.status(404).json({ error: 'Exchange rate data not found' });
+      }
 
-    // Cache the result in Redis
-    await client.setEx('exchangeRateData', 3600, JSON.stringify(formattedData)); // Cache for 1 hour
+      const exchangeRateData = [];
+      for (const [date, data] of Object.entries(timeSeries)) {
+          const exchangeRate = {
+              date,
+              open: parseFloat(data['1. open']),
+              high: parseFloat(data['2. high']),
+              low: parseFloat(data['3. low']),
+              close: parseFloat(data['4. close']),
+          };
 
-    res.json(formattedData);
-    console.log("Exchange rate data fetched and stored successfully");
+          // Upsert the exchange rate data in MongoDB
+          await ExchangeRate.updateOne(
+              { date }, // Match by date
+              { $set: exchangeRate }, // Update the fields
+              { upsert: true } // Insert if it doesn't exist
+          );
+
+          exchangeRateData.push(exchangeRate);
+      }
+
+      // Store data in Redis cache
+      await client.setEx('EUR/USD', 3600, JSON.stringify(exchangeRateData)); // Cache for 1 hour
+
+      res.json(exchangeRateData);
   } catch (error) {
-    console.error("Error fetching exchange rate data:", error);
-    res.status(500).json({ error: 'Failed to fetch exchange rate data' });
+      console.error("Error fetching exchange rate data:", error.message);
+      res.status(500).json({ error: 'Error fetching exchange rate data' });
   }
 });
+
 
 
 app.listen(PORT, () => {

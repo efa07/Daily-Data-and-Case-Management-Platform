@@ -8,7 +8,7 @@ const ExchangeRateChart = () => {
   useEffect(() => {
     const fetchExchangeRateData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/exchange-rate');
+        const response = await axios.get('http://localhost:5000/api/exchange-rate/EUR/USD');
         setExchangeRateData(response.data);
       } catch (error) {
         console.error('Error fetching exchange rate data:', error);

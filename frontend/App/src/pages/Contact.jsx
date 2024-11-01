@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import "./Contact.module.css"
+import styles from "./Contact.module.css"; // Ensure you have your CSS imported correctly
+
 const Contact = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         message: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -15,14 +19,36 @@ const Contact = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log('Form submitted:', formData);
+        setIsSubmitting(true);
+        setError(''); // Reset previous errors
+
+        try {
+            // Replace this URL with your actual endpoint
+            const response = await fetch('https://your-api-endpoint.com/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send message');
+            }
+
+            setSuccess(true);
+            setFormData({ name: '', email: '', message: '' }); // Reset form
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
-        <div>
+        <div className={styles.contactContainer}>
             <h1>Contact Us</h1>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -57,8 +83,12 @@ const Contact = () => {
                         required
                     />
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                </button>
             </form>
+            {success && <p className={styles.successMessage}>Message sent successfully!</p>}
+            {error && <p className={styles.errorMessage}>Error: {error}</p>}
         </div>
     );
 };

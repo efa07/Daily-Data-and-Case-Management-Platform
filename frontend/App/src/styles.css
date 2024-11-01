@@ -13,9 +13,12 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color: #f5f7fa;
   }
   
-  
+  h2{
+    color: #333;
+  }
   
   /* Main Content */
   main {

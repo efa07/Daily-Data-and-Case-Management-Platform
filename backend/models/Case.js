@@ -1,14 +1,36 @@
 import mongoose from 'mongoose';
 
 const caseSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String },
-    status: { type: String, enum: ['Open', 'In Progress', 'Closed'], default: 'Open' },
-    priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Medium' },
-    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
-    dueDate: { type: Date }
+    title: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: false,
+    },
+    priority: {
+        type: String,
+        enum: ['Low', 'Medium', 'High'],
+        default: 'Medium'
+    },
+    status: {
+        type: String,
+        enum: ['Open', 'In Progress', 'Closed'],
+        default: 'Open'
+    },
+    assignedTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
+    },
+    dueDate: {
+        type: Date,
+        required: false
+    }
+}, {
+    timestamps: true
 });
 
-export default mongoose.model('Case', caseSchema);
+const Case = mongoose.model('Case', caseSchema);
+export default Case;

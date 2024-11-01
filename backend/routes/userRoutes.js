@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -31,6 +30,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+// POST /api/login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -49,12 +49,13 @@ router.post('/login', async (req, res) => {
 
       // Generate JWT token
       const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
-      res.json({ token });
+      
+      // Send token and user id to the frontend
+      res.json({ token, userId: user._id });
   } catch (error) {
       console.error('Login error:', error);
       res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
 
 export default router;

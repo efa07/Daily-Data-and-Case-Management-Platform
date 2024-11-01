@@ -1,127 +1,124 @@
 /* UserDashboard.css */
+
 .user-dashboard {
-  max-width: 1200px;
-  margin: 50px auto;
-  padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  color: #333;
+  background-color: #f5f7fa;
 }
 
 .user-dashboard h1 {
+  font-size: 2.5em;
+  color: #3a3a3a;
   text-align: center;
-  color: white;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5em;
 }
-th {
-  color: #333;
-}
-td {
-  color: #fff;
-}
+
 .search-bar {
+  width: 50%;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 30px;
 }
 
 .search-bar input {
-  width: 300px;
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px 0 0 12px;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
+  width: 70%;
+  padding: 10px;
+  border: 2px solid #c5cae9;
+  border-radius: 5px;
+  font-size: 1em;
+  transition: border-color 0.3s;
 }
 
 .search-bar input:focus {
+  border-color: #5c6bc0;
   outline: none;
-  border-color: #6c5ce7;
-  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
 }
 
 .search-bar button {
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
+  background-color: #5c6bc0;
+  color: #fff;
+  width: 100px;
+  margin-left:0.5em; ;
+  padding: 10px 20px;
   border: none;
-  border-radius: 0 12px 12px 0;
-  background: #6c5ce7;
-  color: white;
+  border-radius: 5px;
+  font-size: 1em;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .search-bar button:hover {
-  background: #5b4bc4;
+  background-color: #3f51b5;
 }
 
-.market-overview,
-.case-overview {
-  margin-top: 2rem;
+.market-overview, .case-overview {
+  margin-top: 40px;
 }
 
-.market-overview h2,
-.case-overview h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+.mh2 {
+  font-size: 1.8em;
+  color: #3a3a3a;
+  border-bottom: 2px solid #5c6bc0;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
 }
-.mh2{
-  color: #f1f1f1;
-}
+
 .grid-item {
-  background: white;
-  border-radius: 16px;
-  transition: transform 0.3s ease;
-}
-
-.grid-item:hover {
-  transform: translateY(-5px);
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .case-overview table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin-top: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.case-overview th,
-.case-overview td {
-  padding: 0.8rem;
-  text-align: left;
+.case-overview th, .case-overview td {
+  padding: 12px;
   border-bottom: 1px solid #e0e0e0;
+  text-align: left;
 }
 
 .case-overview th {
-  background-color: #f1f1f1;
-  font-weight: 600;
+  background-color: #5c6bc0;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.case-overview tr:nth-child(even) {
+  background-color: #f5f5f5;
 }
 
 .case-overview tr:hover {
-  background-color: #f9f9f9;
+  background-color: #e0e7ff;
 }
 
-/* Responsive Design */
+.case-overview td {
+  font-size: 0.95em;
+  color: #3a3a3a;
+}
+
 @media (max-width: 768px) {
-  .user-dashboard {
-    padding: 1rem;
+  .user-dashboard h1 {
+    font-size: 2em;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: center;
   }
 
   .search-bar input {
     width: 100%;
   }
 
-  .grid-item {
-    padding: 1rem;
+  .market-overview h2, .case-overview h2 {
+    font-size: 1.5em;
   }
-}
-
-/* Utility Classes */
-.mb-4 {
-  margin-bottom: 1.5rem;
-}
-
-.mt-2 {
-  margin-top: 0.8rem;
 }

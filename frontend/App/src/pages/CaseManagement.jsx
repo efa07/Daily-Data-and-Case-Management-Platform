@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 import "./CaseManagement.css";
 
 const CaseManagement = () => {
@@ -15,10 +16,23 @@ const CaseManagement = () => {
   const [editMode, setEditMode] = useState(false);
   const [currentCaseId, setCurrentCaseId] = useState(null);
 
-  // Fetch cases
+  // Fetch cases and user ID
   useEffect(() => {
     fetchCases();
+    setUserIdFromToken();
   }, []);
+
+  // Decode JWT to get the user ID
+  const setUserIdFromToken = () => {
+    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage with key 'token'
+    if (token) {
+      const decodedToken = jwtDecode(token); // Use decode instead of jwtDecode
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        assignedTo: decodedToken.id // Set the assignedTo field with the user ID
+      }));
+    }
+  };
 
   const fetchCases = async () => {
     try {
@@ -37,21 +51,30 @@ const CaseManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (editMode) {
-        // Update case
-        await axios.put(`http://localhost:5000/api/cases/${currentCaseId}`, formData);
-      } else {
-        // Create case
-        await axios.post('http://localhost:5000/api/cases', formData);
-      }
-      // Reset form data
-      setFormData({ title: '', description: '', priority: 'Medium', status: 'Open', assignedTo: '', dueDate: '' });
-      setEditMode(false);
-      fetchCases();
+        if (editMode) {
+            await axios.put(`http://localhost:5000/api/cases/${currentCaseId}`, formData);
+        } else {
+            console.log('Sending data:', formData); // Log what you're sending
+            const response = await axios.post('http://localhost:5000/api/cases', formData);
+            console.log('Response:', response.data); // Log the response
+            alert("Case created successfully!");
+        }
+        setFormData({ 
+            title: '', 
+            description: '', 
+            priority: 'Medium', 
+            status: 'Open', 
+            assignedTo: formData.assignedTo, 
+            dueDate: '' 
+        });
+        setEditMode(false);
+        fetchCases();
     } catch (error) {
-      console.error("Error saving case:", error);
+        console.error("Error saving case:", error);
+        const errorMessage = error.response?.data?.details || error.message;
+        alert(`An error occurred: ${errorMessage}`);
     }
-  };
+};
 
   const handleEdit = (caseItem) => {
     setFormData({
@@ -72,16 +95,16 @@ const CaseManagement = () => {
       fetchCases();
     } catch (error) {
       console.error("Error deleting case:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 
   return (
     <div className="case-management">
-      <h2>Case Management</h2>
+      <h2 className='ch2'>Case Management</h2>
 
       {/* Case List */}
       <div className="case-list">
-        <h3>Cases</h3>
         {cases.length > 0 ? (
           cases.map((caseItem) => (
             <div key={caseItem._id} className="case-item">
@@ -89,7 +112,7 @@ const CaseManagement = () => {
               <p>Description: {caseItem.description}</p>
               <p>Priority: {caseItem.priority}</p>
               <p>Status: {caseItem.status}</p>
-              <p>Assigned To: {caseItem.assignedTo ? caseItem.assignedTo : 'N/A'}</p>
+              <p>Assigned To: {caseItem.assignedTo ? caseItem.assignedTo.email : 'N/A'}</p>
               <p>Due Date: {caseItem.dueDate ? new Date(caseItem.dueDate).toLocaleDateString() : 'N/A'}</p>
               <button onClick={() => handleEdit(caseItem)} className='edit'>Edit</button>
               <button onClick={() => handleDelete(caseItem._id)} className='delete'>Delete</button>
@@ -116,7 +139,6 @@ const CaseManagement = () => {
             <option value="In Progress">In Progress</option>
             <option value="Closed">Closed</option>
           </select>
-          <input type="text" name="assignedTo" placeholder="Assigned To (User ID)" value={formData.assignedTo} onChange={handleChange} />
           <input type="date" name="dueDate" placeholder="Due Date" value={formData.dueDate} onChange={handleChange} />
           <button type="submit">{editMode ? 'Update Case' : 'Create Case'}</button>
           {editMode && <button type="button" onClick={() => setEditMode(false)}>Cancel</button>}

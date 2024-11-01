@@ -1,125 +1,229 @@
 .case-management {
-  max-width: 100vw;
-  margin: 55px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 20px;
+  background-color: #f5f7fa;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .case-management h2 {
+  color: #333;
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #333333;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  font-weight: 600;
 }
 
+.case-management h3 {
+  color: #34495e;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+/* Grid Layout */
 .case-list {
-  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 }
 
-.case-list h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #555555;
-}
-
+/* Case Items */
 .case-item {
-  background-color: #f9f9f9;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  transition: box-shadow 0.2s ease;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #e1e8ed;
 }
 
 .case-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .case-item h4 {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #333333;
+  color: #1a73e8;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .case-item p {
-  margin: 5px 0;
-  color: #666666;
+  color: #4a5568;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
+/* Status and Priority Badges */
+.case-item p:nth-child(3),
+.case-item p:nth-child(4) {
+  display: inline-block;
+  margin-right: 1rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Priority Colors */
+.priority-high {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.priority-medium {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.priority-low {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+/* Status Colors */
+.status-open {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.status-progress {
+  background-color: #f3e8ff;
+  color: #7e22ce;
+}
+
+.status-closed {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+/* Buttons */
 .case-item button {
-  margin-right: 10px;
-  padding: 8px 12px;
-  color: white;
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-.edit{
-  background-color: #ffc107;
-}
-.delete{
-  background-color: #dc3545;
-}
-.case-item button:hover {
-  background-color: #0056b3;
+  transition: background-color 0.2s;
 }
 
+.edit {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.edit:hover {
+  background-color: #1557b0;
+}
+
+.delete {
+  background-color: #dc2626;
+  color: white;
+}
+
+.delete:hover {
+  background-color: #b91c1c;
+}
+
+/* Form Styling */
 .case-form {
-  border-top: 1px solid #dddddd;
-  padding-top: 20px;
-}
-
-.case-form h3 {
-  margin-bottom: 15px;
-  color: #555555;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .case-form form {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
-.case-form input[type="text"],
-.case-form input[type="date"],
-.case-form select,
-.case-form textarea {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #dddddd;
-  border-radius: 4px;
+.case-form input,
+.case-form textarea,
+.case-form select {
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: border-color 0.2s;
 }
 
-.case-form input[type="text"]:focus,
-.case-form input[type="date"]:focus,
-.case-form select:focus,
-.case-form textarea:focus {
-  border-color: #007bff;
+.case-form input:focus,
+.case-form textarea:focus,
+.case-form select:focus {
   outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
 }
 
-.case-form button {
-  padding: 10px;
-  background-color: #28a745;
+.case-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.case-form button[type="submit"] {
+  background-color: #1a73e8;
   color: white;
+  padding: 0.75rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s;
 }
 
-.case-form button:hover {
-  background-color: #218838;
+.case-form button[type="submit"]:hover {
+  background-color: #1557b0;
 }
 
 .case-form button[type="button"] {
-  background-color: #dc3545;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .case-form button[type="button"]:hover {
-  background-color: #c82333;
+  background-color: #cbd5e1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .case-management {
+      padding: 0 15px;
+  }
+
+  .case-list {
+      grid-template-columns: 1fr;
+  }
+
+  .case-form {
+      padding: 1.5rem;
+  }
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #4a5568;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #4a5568;
 }
