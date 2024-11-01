@@ -1,7 +1,7 @@
 .sidebar {
-  width: 60px; /* collapsed width */
+  width: 60px;
   height: 100vh;
-  border-right: 1px solid #6c5ce7;
+  border-right: 2px solid #6c5ce7;
   background-color: #1a1a1a;
   transition: width 0.3s ease;
   position: fixed;
@@ -14,7 +14,7 @@
 }
 
 .sidebar:hover {
-  width: 250px; /* expanded width */
+  width: 250px; 
 }
 
 .sidebar-toggle {
@@ -35,14 +35,14 @@
   color: white;
   text-decoration: none;
   border-radius: 4px;
-  opacity: 0; /* Hide links when sidebar is collapsed */
-  visibility: hidden; /* Prevent layout shift */
+  opacity: 0; 
+  visibility: hidden; 
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .sidebar:hover .sidebar-links a {
-  opacity: 1; /* Show links when sidebar is expanded */
-  visibility: visible; /* Make links visible */
+  opacity: 1; 
+  visibility: visible; 
 }
 
 .sidebar-links a:hover {
