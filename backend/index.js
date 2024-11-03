@@ -120,18 +120,30 @@ app.get('/api/financial/:symbol', async (req, res) => {
 });
 
 
-// Crypto data route - Fetch, store, and retrieve from MongoDB
 app.get('/api/bitcoin/market_chart', async (req, res) => {
   try {
+    // Check if data is in cache
+    const cachedData = await client.get('BTC/USD');
+
+    if (cachedData) {
+      console.log("Bitcoin market chart data retrieved from Redis cache");
+      return res.json(JSON.parse(cachedData));
+    }
+
+    // Fetch data from CoinGecko API
     const { data } = await axios.get('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1');
 
+    // Store the data in MongoDB
     const cryptoData = new CryptoData({ symbol: 'BTC/USD', data });
     await cryptoData.save();
 
+    // Store data in Redis cache
+    await client.setEx('BTC/USD', 3600, JSON.stringify(data)); 
+
     res.json(data);
-    console.log("Bitcoin market chart data fetched and stored successfully");
+    console.log("Bitcoin market chart data fetched, stored in MongoDB, and cached successfully");
   } catch (error) {
-    console.error("Error fetching or storing Bitcoin data:", error);
+    console.error("Error fetching or storing Bitcoin data:", error.message);
     res.status(500).send({ error: 'Failed to fetch or store data' });
   }
 });
@@ -187,7 +199,7 @@ app.get('/api/fetch-coffee-data', async (req, res) => {
   try {
     const response = await axios.get('https://www.alphavantage.co/query?function=COFFEE&interval=monthly&apikey=demo');
     
-    const coffeeDataArray = response.data.data; // Access the data field directly from the response
+    const coffeeDataArray = response.data.data; 
 
     // Save each coffee data point to MongoDB
     const coffeeDataDocuments = coffeeDataArray.map(item => ({

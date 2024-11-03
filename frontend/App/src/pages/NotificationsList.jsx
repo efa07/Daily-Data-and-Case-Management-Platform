@@ -9,7 +9,6 @@ const NotificationsList = ({ userId }) => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                console.log(userId);
                 const response = await fetch(`http://localhost:5000/api/case-notifications/${userId}`);
                 if (response.ok) {
                     const data = await response.json();

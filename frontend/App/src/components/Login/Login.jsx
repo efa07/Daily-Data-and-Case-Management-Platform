@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../Auth/AuthContext";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 import "./Login.css";
 
 const Login = () => {
@@ -8,13 +10,11 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         try {
             const response = await fetch('http://localhost:5000/api/users/login', {
@@ -28,20 +28,21 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('token', data.token);
+                localStorage.setItem('token', data.token,'username', data.username,'loginMessage', 'Login successful!');
                 login(data);
-                navigate('/'); // Use navigate instead of window.location.href
+                navigate('/'); 
             } else {
-                setError(data.message);
+                toast.error(data.message); 
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            toast.error('An error occurred. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
+    <div classname="login-co" >      
         <div className="login-container">
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
@@ -65,11 +66,12 @@ const Login = () => {
                         required
                     />
                 </div>
-                {error && <p className="error">{error}</p>}
                 <button type="submit" disabled={loading}>
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
             </form>
+            <ToastContainer /> 
+        </div>
         </div>
     );
 };

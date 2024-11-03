@@ -27,12 +27,14 @@ const ExchangeRateChart = () => {
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,
+        pointRadius: 0,
+        borderWidth: 2,
       },
     ],
   };
 
   return (
-    <div>
+    <div style={{ width: '100%',height: "260px" }}>
       <h2 style={{color:"#333"}}>EUR to USD Exchange Rate</h2>
       <Line data={chartData} />
     </div>

@@ -96,7 +96,7 @@
 
 .logout-button {
     background: none;
-    color: var(--text-color);
+    color: var(--danger-color);
     border: 2px solid var(--danger-color);
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;

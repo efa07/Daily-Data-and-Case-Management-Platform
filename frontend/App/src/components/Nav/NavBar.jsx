@@ -44,7 +44,7 @@ const NavBar = ({ notifications = [], onNotificationClick }) => {
                 </li>
                 <li>
                     <IconButton
-                        color="inherit"
+                        sx={{ color: 'white' }}
                         onClick={handleBellClick}
                         aria-label="notifications"
                     >

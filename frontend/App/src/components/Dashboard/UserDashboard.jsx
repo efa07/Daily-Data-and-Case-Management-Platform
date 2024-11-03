@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import FinancialChart from "../Service/ExchangeRateChart";
-import { Grid, Box, colors } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import './UserDashboard.css';
 import BitcoinChart from "../Service/Bitcoin";
 import CoffeeChart from '../Service/CoffeeChart';
 import MarketAlertForm from '../../pages/MarketAlertForm';
 import NotificationsList from '../../pages/NotificationsList';
-
+import { toast, ToastContainer } from 'react-toastify';
 
 const UserDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,13 +14,21 @@ const UserDashboard = () => {
   const [cases, setCases] = useState([]);
 
   const user = JSON.parse(localStorage.getItem('user'));
-  const userId = user.userId
+  const userId = user ? user.userId : '';
+  const username = user ? user.username : 'Guest'; 
 
   const marketData = {
     stocks: { total: 5000, change: '+2%' },
     commodities: { total: 2000, change: '+1%' },
     cryptocurrencies: { total: 1000, change: '+3%' },
   };
+
+  useEffect(() => {
+    const message = localStorage.getItem(user);
+    if (message) {
+        toast.success(message.username); // Show the success message
+    }
+  }, [user]);
 
   // Fetch case data from API when the component mounts
   useEffect(() => {
@@ -55,7 +63,8 @@ const UserDashboard = () => {
 
   return (
     <div className="user-dashboard">
-      <h1>User Dashboard</h1>
+      
+      <h1>Welcome, {username}!</h1>
       <div className="search-bar">
         <input
           type="text"
@@ -116,10 +125,9 @@ const UserDashboard = () => {
 
       <div className='not'>
             <h1>Notification System</h1>
-            
             <NotificationsList userId={userId} />
         </div>
-
+        <ToastContainer position='bottom'/>
     </div>
   );
 };
