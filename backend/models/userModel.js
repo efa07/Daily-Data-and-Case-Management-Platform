@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-// Define the schema for Users
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true },
@@ -14,7 +13,6 @@ const userSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now }
 });
 
-// Create the model
 const User = mongoose.model('User', userSchema);
 
 export default User;

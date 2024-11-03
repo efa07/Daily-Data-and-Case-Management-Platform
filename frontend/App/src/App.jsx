@@ -5,6 +5,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 const LazyContact = React.lazy(() => import("./pages/Contact"));
 const LazyNotFound = React.lazy(() => import('./pages/NotFound'));
 const LazyAbout = React.lazy(() => import('./pages/About'));
+import axios from 'axios';
 import Login from "./components/Login/Login";
 import UserDashboard from "./components/Dashboard/UserDashboard";
 import CoffeeChart from "./components/Service/CoffeeChart";
@@ -19,6 +20,7 @@ import "./app.css";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [notifications, setNotifications] = useState([]);
   const [animateArrow, setAnimateArrow] = useState(true);
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
   const isNotFoundRoute = location.pathname === '*' || !([
@@ -31,7 +33,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimateArrow(false);
-    }, 3000); // Stop animation after 3 seconds
+    }, 3000); 
     return () => clearTimeout(timer);
   }, []);
   const shouldHideNav = isAuthRoute || isNotFoundRoute;
@@ -43,6 +45,24 @@ function App() {
     }
   }, [location.pathname, token, navigate]);
 
+useEffect(() => {
+  const fetchCases = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:5000/api/cases');
+      setNotifications(data);
+    } catch (error) {
+      console.error("Error fetching cases:", error);
+    }
+  }
+  fetchCases();
+}
+, []);
+const handleNotificationClick = (id) => {
+  setNotifications((prevNotifications) =>
+    prevNotifications.filter(notification => notification.id !== id)
+  );
+  navigate('/case'); 
+}
   return (
     <div className="App" style={{ display: 'flex' }}>
       {/* Sidebar */}
@@ -80,7 +100,10 @@ function App() {
       }}>
         
         {/* Only render NavBar if not on auth routes or unknown routes */}
-        {!shouldHideNav && <NavBar notifications={[{ id: 1, message: "New message received" }, { id: 2, message: "System update available" }]} />
+        {!shouldHideNav && <NavBar
+          notifications={notifications}
+          onNotificationClick={handleNotificationClick} 
+        />
       }
       
           <Routes>

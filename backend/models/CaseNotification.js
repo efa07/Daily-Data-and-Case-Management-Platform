@@ -6,7 +6,7 @@ const caseNotificationSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     caseId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Case' },  // Reference to a case
     message: { type: String, required: true },
-    status: { type: String, required: true },  // e.g., 'updated', 'resolved', etc.
+    status: { type: String, required: true }, 
     createdAt: { type: Date, default: Date.now },
 });
 

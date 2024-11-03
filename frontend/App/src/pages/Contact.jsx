@@ -23,29 +23,7 @@ const Contact = () => {
         e.preventDefault();
         setIsSubmitting(true);
         setError(''); // Reset previous errors
-
-        try {
-            // Replace this URL with your actual endpoint
-            const response = await fetch('https://your-api-endpoint.com/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to send message');
-            }
-
-            setSuccess(true);
-            setFormData({ name: '', email: '', message: '' }); // Reset form
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    }
 
     return (
         <div className={styles.contactContainer}>

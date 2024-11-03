@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { IconButton, Badge, Menu, MenuItem } from '@mui/material';
+import { IconButton, Badge, Menu, MenuItem, Typography } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import './NavBar.css';
 
-const NavBar = ({ notifications }) => {
+const NavBar = ({ notifications = [], onNotificationClick }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
 
-    // Function to determine if a link is active
     const isActive = (path) => location.pathname === path;
 
     const handleLogout = () => {
@@ -44,7 +43,11 @@ const NavBar = ({ notifications }) => {
                     <Link to="/contact" className={isActive('/contact') ? 'active-link' : 'nav-link'}>Contact</Link>
                 </li>
                 <li>
-                    <IconButton color="inherit" onClick={handleBellClick}>
+                    <IconButton
+                        color="inherit"
+                        onClick={handleBellClick}
+                        aria-label="notifications"
+                    >
                         <Badge badgeContent={unreadCount} color="secondary">
                             <NotificationsIcon />
                         </Badge>
@@ -57,8 +60,27 @@ const NavBar = ({ notifications }) => {
                     >
                         {notifications.length > 0 ? (
                             notifications.map((notification) => (
-                                <MenuItem key={notification.id} onClick={handleClose}>
-                                    {notification.message}
+                                <MenuItem 
+                                    key={notification._id} 
+                                    onClick={() => {
+                                        onNotificationClick(notification._id);
+                                        handleClose();
+                                    }}
+                                >
+                                    <div className="notf">
+                                        <Typography variant="subtitle1" fontWeight="bold">
+                                            {notification.title}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            Priority: {notification.priority}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            Status: {notification.status}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            Due: {new Date(notification.dueDate).toLocaleDateString()}
+                                        </Typography>
+                                    </div>
                                 </MenuItem>
                             ))
                         ) : (
@@ -67,7 +89,9 @@ const NavBar = ({ notifications }) => {
                     </Menu>
                 </li>
                 <li>
-                    <button className="logout-button" onClick={handleLogout}>Logout</button>
+                    <button className="logout-button" onClick={handleLogout} aria-label="logout">
+                        Logout
+                    </button>
                 </li>
             </ul>
         </nav>

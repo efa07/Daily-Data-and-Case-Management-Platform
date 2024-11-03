@@ -28,6 +28,8 @@ const PORT = process.env.PORT || 5000;
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
 const API_KEY = process.env.API_KEY;
 const WPORT = process.env.WSPORT || 3000;
+
+
 // Create and connect to Redis client
 const client = createClient({
   socket: {
@@ -39,7 +41,8 @@ const client = createClient({
 client.on('error', (err) => console.error('Redis Client Error:', err));
 await client.connect();
 
-// Connect to the INSA database
+
+// Connect to the database
 connectDB();
 
 // Middleware
@@ -60,6 +63,7 @@ const server = app.listen(WPORT, () => {
 const wss = new WebSocketServer({ noServer: true });
 global.websocketClients = new Set();
 
+// Handle WebSocket connections
 wss.on('connection', (ws) => {
   global.websocketClients.add(ws);
   ws.on('close', () => global.websocketClients.delete(ws));
@@ -76,6 +80,7 @@ server.on('upgrade', (request, socket, head) => {
 app.get('/', (req, res) => {
   res.send('Welcome to Comprehensive Data and Case Management API Server, developed by Efa Tariku');
 });
+
 
 // Financial Data Route with Redis Caching
 app.get('/api/financial/:symbol', async (req, res) => {
@@ -114,6 +119,7 @@ app.get('/api/financial/:symbol', async (req, res) => {
   }
 });
 
+
 // Crypto data route - Fetch, store, and retrieve from MongoDB
 app.get('/api/bitcoin/market_chart', async (req, res) => {
   try {
@@ -129,6 +135,7 @@ app.get('/api/bitcoin/market_chart', async (req, res) => {
     res.status(500).send({ error: 'Failed to fetch or store data' });
   }
 });
+
 
 // Stock data route - Fetch, store, and retrieve from MongoDB
 app.get('/api/stock', async (req, res) => {
@@ -146,6 +153,7 @@ app.get('/api/stock', async (req, res) => {
     res.status(500).send({ error: 'Failed to fetch or store data' });
   }
 });
+
 
 // Commodity data route with Redis caching
 app.get('/api/commodity/:symbol', async (req, res) => {
@@ -198,7 +206,6 @@ app.get('/api/fetch-coffee-data', async (req, res) => {
 // Fetch stored coffee data
 app.get('/api/coffee-data', async (req, res) => {
   try {
-    // Check cache first
     const cachedData = await client.get('coffeeData');
 
     if (cachedData) {
@@ -267,7 +274,6 @@ app.get('/api/exchange-rate/EUR/USD', async (req, res) => {
       res.status(500).json({ error: 'Error fetching exchange rate data' });
   }
 });
-
 
 
 app.listen(PORT, () => {

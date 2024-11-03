@@ -13,7 +13,6 @@ import {
 import axios from 'axios';
 import "./coffee.css";
 
-// Register the necessary chart components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const CoffeeChart = () => {
@@ -23,7 +22,6 @@ const CoffeeChart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/coffee-data');
-        console.log('Coffee Data from MongoDB:', response.data);
         setCoffeeData(response.data);
       } catch (error) {
         console.error('Error fetching coffee data:', error);

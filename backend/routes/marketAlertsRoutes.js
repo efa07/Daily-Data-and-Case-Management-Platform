@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
         await newAlert.save();
         res.status(201).json(newAlert);
     } catch (error) {
-        console.error('Error creating market alert:', error); // Log the error details
+        console.error('Error creating market alert:', error); 
         res.status(500).json({ error: 'Failed to create market alert' });
     }
 });

@@ -2,9 +2,10 @@
   width: 60px;
   height: 100vh;
   border-right: 2px solid #6c5ce7;
-  background-color: #1a1a1a;
+  background-color: #222;
   transition: width 0.3s ease;
   position: fixed;
+  margin-top: 70px;
   left: 0;
   top: 0;
   color: white;

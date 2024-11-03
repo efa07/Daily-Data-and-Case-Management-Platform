@@ -28,7 +28,6 @@ const commoditySchema = new mongoose.Schema({
   ],
 });
 
-// Create the model
 const Commodity = mongoose.model('Commodity', commoditySchema);
 
 export default Commodity; 

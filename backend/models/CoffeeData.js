@@ -2,8 +2,8 @@
 import mongoose from "mongoose";
 
 const CoffeeDataSchema = new mongoose.Schema({
-  date: { type: String, required: true }, // Store date as a string
-  value: { type: Number, required: true }, // Store price as a number
+  date: { type: String, required: true },
+  value: { type: Number, required: true },
 });
 
 export default mongoose.model('CoffeeData', CoffeeDataSchema);
