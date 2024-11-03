@@ -43,8 +43,27 @@
 .sidebar:hover .sidebar-links a {
   opacity: 1; 
   visibility: visible; 
+  
+}
+.sidebar:hover .sidebar-toggle button {
+  opacity: 0; 
+  visibility: hidden; 
 }
 
 .sidebar-links a:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  animation: arrowBounce 60s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-5px); /* Move the arrow left slightly */
+  }
+}
+
+.sidebar-toggle button {
+  animation: arrowBounce 1s ease-in-out infinite; 
 }

@@ -4,11 +4,17 @@ import { Grid, Box, colors } from '@mui/material';
 import './UserDashboard.css';
 import BitcoinChart from "../Service/Bitcoin";
 import CoffeeChart from '../Service/CoffeeChart';
+import MarketAlertForm from '../../pages/MarketAlertForm';
+import NotificationsList from '../../pages/NotificationsList';
+
 
 const UserDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [assets, setAssets] = useState([]);
   const [cases, setCases] = useState([]);
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user.userId
 
   const marketData = {
     stocks: { total: 5000, change: '+2%' },
@@ -21,6 +27,7 @@ const UserDashboard = () => {
     const fetchCases = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/cases');
+        
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -106,6 +113,13 @@ const UserDashboard = () => {
           </tbody>
         </table>
       </div>
+
+      <div className='not'>
+            <h1>Notification System</h1>
+            
+            <NotificationsList userId={userId} />
+        </div>
+
     </div>
   );
 };

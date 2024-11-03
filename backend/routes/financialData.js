@@ -36,4 +36,6 @@ router.get('/api/financial/:symbol', async (req, res) => {
     }
 });
 
+
+
 export default router;

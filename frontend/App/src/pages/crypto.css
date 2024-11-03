@@ -14,7 +14,7 @@
   margin-bottom: 2rem;
 }
 
-.form-control {
+.form-input {
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
@@ -143,7 +143,7 @@
   }
 
   .text-center {
-    color: #ffffff;
+    color: #333;
   }
 
   .form-control {

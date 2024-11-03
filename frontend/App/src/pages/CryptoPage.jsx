@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
+import MarketAlertForm from './MarketAlertForm';
 import 'chartjs-adapter-date-fns';
 import {
     Chart as ChartJS,
@@ -22,6 +23,7 @@ const CryptoCurrencyInfo = () => {
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const userId  = "123"
 
     const fetchCoinData = async (coin) => {
         setLoading(true);
@@ -65,7 +67,7 @@ const CryptoCurrencyInfo = () => {
             setChartData(prices);
         } catch (error) {
             console.error("Error fetching chart data:", error);
-            setError(error.message); // Set error message
+            setError(error.message); 
         }
     };
 
@@ -79,19 +81,20 @@ const CryptoCurrencyInfo = () => {
     return (
         <div className="container">
             <h1 className="text-center">Cryptocurrency Information</h1>
+            
             <form onSubmit={handleSearch} className="mb-4">
                 <input
                     type="text"
                     placeholder="Search for a cryptocurrency(ex-Bitcoin)..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control"
+                    className="form-input"
                 />
                 <button type="submit" className="btn btn-primary mt-2">Search</button>
             </form>
 
             {loading && <p>Loading...</p>}
-            {error && <p className="text-danger">{error}</p>} {/* Display error message */}
+            {error && <p className="text-danger">{error}</p>} 
             {coinData && !loading && (
                 <div className="card mb-4">
                     <div className="card-body">
@@ -119,12 +122,12 @@ const CryptoCurrencyInfo = () => {
                             responsive: true,
                             scales: {
                                 x: {
-                                    type: 'time', // Use time scale for the x-axis
+                                    type: 'time', 
                                     time: {
-                                        unit: 'day', // Specify the unit
-                                        tooltipFormat: 'll', // Format for tooltip
+                                        unit: 'day', 
+                                        tooltipFormat: 'll',
                                         displayFormats: {
-                                            day: 'MMM d', // Display format for days
+                                            day: 'MMM d', 
                                         },
                                     },
                                 },
@@ -142,6 +145,8 @@ const CryptoCurrencyInfo = () => {
                     />
                 </div>
             )}
+
+<MarketAlertForm userId={userId} />
         </div>
     );
 };

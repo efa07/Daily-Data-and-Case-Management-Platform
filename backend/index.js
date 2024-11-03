@@ -14,6 +14,10 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from "./models/userModel.js";
 import mongoose from 'mongoose';
+import notificationRoutes from './routes/notificationsRoutes.js';
+import WebSocket, { WebSocketServer } from 'ws';
+import marketAlertsRoutes from './routes/marketAlertsRoutes.js';
+import caseNotificationsRoutes from './routes/caseNotificationsRoutes.js';
 
 
 // Load environment variables
@@ -23,7 +27,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
 const API_KEY = process.env.API_KEY;
-
+const WPORT = process.env.WSPORT || 3000;
 // Create and connect to Redis client
 const client = createClient({
   socket: {
@@ -43,7 +47,30 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/cases', caseRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/market-alerts', marketAlertsRoutes);
+app.use('/api/case-notifications', caseNotificationsRoutes);
 
+
+const server = app.listen(WPORT, () => {
+  console.log(`Server is running on port ${WPORT}`);
+});
+
+// Initialize WebSocket Server
+const wss = new WebSocketServer({ noServer: true });
+global.websocketClients = new Set();
+
+wss.on('connection', (ws) => {
+  global.websocketClients.add(ws);
+  ws.on('close', () => global.websocketClients.delete(ws));
+});
+
+// Upgrade HTTP server to handle WebSocket connections
+server.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.emit('connection', ws, request);
+  });
+});
 
 // Sample route for the API
 app.get('/', (req, res) => {
@@ -55,19 +82,15 @@ app.get('/api/financial/:symbol', async (req, res) => {
   const { symbol } = req.params;
 
   try {
-    // Check if data is in cache
     const cachedData = await client.get(symbol);
-
     if (cachedData) {
       console.log("Data retrieved from Redis cache");
       return res.json(JSON.parse(cachedData));
     }
 
-    // Fetch data from external API if not in cache
     const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d`);
     const data = response.data;
 
-    // Validate data structure
     if (!data.chart || !data.chart.result || data.chart.result.length === 0) {
       return res.status(404).json({ error: 'Stock not found or invalid data structure' });
     }
@@ -83,17 +106,13 @@ app.get('/api/financial/:symbol', async (req, res) => {
       symbol: symbol,
     };
 
-    // Store result in Redis cache with 1-hour expiration
     await client.setEx(symbol, 3600, JSON.stringify(stockData));
-
     res.json(stockData);
   } catch (error) {
     console.error("Error fetching stock data:", error.message);
     res.status(500).json({ error: 'Error fetching stock data' });
   }
 });
-
-
 
 // Crypto data route - Fetch, store, and retrieve from MongoDB
 app.get('/api/bitcoin/market_chart', async (req, res) => {
@@ -258,4 +277,15 @@ app.listen(PORT, () => {
 // Gracefully shut down the Redis client on app exit
 process.on('exit', () => {
   client.quit();
+});
+
+// Add a handler to clean up on termination signals
+process.on('SIGINT', () => {
+  client.quit();
+  process.exit();
+});
+
+process.on('SIGTERM', () => {
+  client.quit();
+  process.exit();
 });

@@ -19,6 +19,7 @@ import "./app.css";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [animateArrow, setAnimateArrow] = useState(true);
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
   const isNotFoundRoute = location.pathname === '*' || !([
     '/', '/about', '/contact', '/case', '/stock', 
@@ -26,6 +27,13 @@ function App() {
     '/login', '/signup'
   ].includes(location.pathname));
   
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimateArrow(false);
+    }, 3000); // Stop animation after 3 seconds
+    return () => clearTimeout(timer);
+  }, []);
   const shouldHideNav = isAuthRoute || isNotFoundRoute;
   const [token] = useState(localStorage.getItem('token'));
 
@@ -72,16 +80,13 @@ function App() {
       }}>
         
         {/* Only render NavBar if not on auth routes or unknown routes */}
-        {!shouldHideNav && <NavBar />}
-        
+        {!shouldHideNav && <NavBar notifications={[{ id: 1, message: "New message received" }, { id: 2, message: "System update available" }]} />
+      }
+      
           <Routes>
-          
             <Route path='login' element={<Login />} />
             <Route path='signup' element={<Signup />} />
-            
-            {/* Wrap protected routes inside a single Route */}
             <Route element={<ProtectedRoute />}>
-            
             <Route path='/' element={<UserDashboard />} />
               <Route path='about' element={
                 <React.Suspense fallback={<div>Loading...</div>}>
