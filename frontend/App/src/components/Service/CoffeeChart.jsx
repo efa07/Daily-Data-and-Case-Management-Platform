@@ -1,11 +1,12 @@
 // src/components/CoffeeChart.js
 import React, { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
@@ -13,7 +14,7 @@ import {
 import axios from 'axios';
 import "./coffee.css";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
 const CoffeeChart = () => {
   const [coffeeData, setCoffeeData] = useState([]);
@@ -37,10 +38,11 @@ const CoffeeChart = () => {
       {
         label: 'Coffee Prices (cents per pound)',
         data: coffeeData.map(item => item.value),
-        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderColor: 'rgba(54, 162, 235, 1)',
         pointRadius: 0,
-        borderWidth: 2,
+        borderWidth: 1,
+        fill: true,
       },
     ],
   };
@@ -48,7 +50,7 @@ const CoffeeChart = () => {
   return (
     <div>
       <h2 className='ch2'>Global Price of Coffee</h2>
-      <Bar 
+      <Line 
         data={chartData} 
         options={{
           plugins: {

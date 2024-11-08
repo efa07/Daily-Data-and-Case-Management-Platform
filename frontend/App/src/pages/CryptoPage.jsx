@@ -113,9 +113,11 @@ const CryptoCurrencyInfo = () => {
                             datasets: [{
                                 label: 'Price (USD)',
                                 data: chartData,
-                                fill: false,
                                 borderColor: 'rgba(75,192,192,1)',
                                 tension: 0.1,
+                                pointRadius: 0,
+                             fill: true,
+                            borderWidth: 2,
                             }],
                         }}
                         options={{

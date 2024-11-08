@@ -137,9 +137,11 @@ const FinancialInfo = () => {
                             datasets: [{
                                 label: 'Price (USD)',
                                 data: chartData,
-                                fill: false,
                                 borderColor: '#3498db',
                                 tension: 0.1,
+                                pointRadius: 0,
+      fill: true,
+      borderWidth: 2,
                             }],
                         }}
                         options={{
