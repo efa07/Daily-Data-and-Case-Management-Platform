@@ -18,7 +18,6 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip,
 
 const FinancialInfo = () => {
     const [financialData, setFinancialData] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -42,31 +41,28 @@ const FinancialInfo = () => {
         try {
             const response = await axios.get(`http://localhost:5000/api/financial/${symbol}`);
             const data = response.data;
-    
-            // Check if the data structure is valid
+
             if (!data.timestamp || !data.closePrices || data.closePrices.length === 0) {
                 throw new Error('Stock not found or invalid data structure');
             }
-    
-            // Prepare the latest data for display
+
             const latestPrice = data.closePrices[data.closePrices.length - 1];
             const latestTimestamp = data.timestamp[data.timestamp.length - 1];
-    
+
             setFinancialData({
-                name: symbol,
+                name: stockSymbols[symbol] || symbol,
                 symbol: symbol,
                 current_price: latestPrice.toFixed(2),
                 date: new Date(latestTimestamp * 1000).toLocaleDateString(),
             });
-    
-            // Prepare chart data for the past month
+
             const chartPoints = data.timestamp.map((time, index) => ({
                 x: new Date(time * 1000),
                 y: data.closePrices[index],
             })).filter(point => point.y !== null);
-    
+
             setChartData(chartPoints.reverse());
-    
+
         } catch (error) {
             console.error("Error fetching financial data:", error);
             setError(error.message);
@@ -74,40 +70,23 @@ const FinancialInfo = () => {
             setLoading(false);
         }
     };
-    
-
-    const handleSearch = (event) => {
-        event.preventDefault();
-        if (searchTerm) {
-            fetchFinancialData(searchTerm.toUpperCase());
-        }
-    };
 
     return (
         <div className="financial-container">
             <h1>Financial Information</h1>
-            
-            <div className="search-section">
-                <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Enter stock symbol (e.g., AAPL, MSFT, TSLA)..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                    <button type="submit" className="search-button">Search</button>
-                </form>
-                
-                <div className="available-symbols">
-                    <h3>Available Symbols:</h3>
-                    <div className="symbols-grid">
-                        {Object.entries(stockSymbols).map(([symbol, name]) => (
-                            <div key={symbol} className="symbol-item">
-                                {symbol}: {name}
-                            </div>
-                        ))}
-                    </div>
+
+            <div className="button-section">
+                <h3>Select a Stock:</h3>
+                <div className="symbols-grid">
+                    {Object.entries(stockSymbols).map(([symbol, name]) => (
+                        <button
+                            key={symbol}
+                            onClick={() => fetchFinancialData(symbol)}
+                            className="symbol-button"
+                        >
+                            {name} ({symbol})
+                        </button>
+                    ))}
                 </div>
             </div>
 
@@ -140,8 +119,8 @@ const FinancialInfo = () => {
                                 borderColor: '#3498db',
                                 tension: 0.1,
                                 pointRadius: 0,
-      fill: true,
-      borderWidth: 2,
+                                fill: true,
+                                borderWidth: 2,
                             }],
                         }}
                         options={{

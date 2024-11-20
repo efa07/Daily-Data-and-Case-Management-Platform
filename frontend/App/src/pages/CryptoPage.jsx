@@ -14,6 +14,7 @@ import {
     TimeScale,
 } from 'chart.js';
 import "./crypto.css"
+
 // register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, TimeScale);
 

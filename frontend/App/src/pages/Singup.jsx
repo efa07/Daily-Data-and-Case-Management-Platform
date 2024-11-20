@@ -7,7 +7,7 @@ const Signup = () => {
     username: '',
     email: '',
     password: '',
-    role: 'analyst', // Default role
+    role: 'user', // Default role
   });
 
   const handleChange = (e) => {
@@ -29,7 +29,8 @@ const Signup = () => {
       const data = await response.json();
       if (response.ok) {
         alert('Signup successful!');
-        // Redirect or perform other actions
+        // Redirect to login page
+        window.location.href = '/login';
       } else {
         alert(data.message || 'Signup failed. Please try again.');
       }
@@ -40,6 +41,7 @@ const Signup = () => {
   };
 
   return (
+    <div className='signup-container'>
     <div className="con">
     <div className="signup-container">
       <h2>Signup</h2>
@@ -88,11 +90,14 @@ const Signup = () => {
           >
             <option value="admin">Admin</option>
             <option value="analyst">Analyst</option>
-            <option value="support staff">Support Staff</option>
+            <option value="support">Support Staff</option>
+            <option value="user">User</option>
+
           </select>
         </div>
         <button type="submit">Sign Up</button>
       </form>
+    </div>
     </div>
     </div>
   );

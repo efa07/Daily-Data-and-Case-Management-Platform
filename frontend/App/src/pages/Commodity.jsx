@@ -18,7 +18,6 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip,
 
 const CommodityInfo = () => {
     const [commodityData, setCommodityData] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -28,9 +27,7 @@ const CommodityInfo = () => {
         'BZ=F': 'Brent Crude Oil',
         'NG=F': 'Natural Gas',
         'HG=F': 'Copper',
-        'AL=F': 'Aluminum',
         'W=F': 'Wheat',
-        'C=F': 'Corn',
         'CT=F': 'Cotton',
         'SB=F': 'Sugar',
         'KC=F': 'Coffee'
@@ -43,14 +40,12 @@ const CommodityInfo = () => {
             const response = await axios.get(`http://localhost:5000/api/commodity/${symbol}`);
             const data = response.data;
     
-            // Check if the data structure is valid
             if (!data.chart || !data.chart.result || data.chart.result.length === 0) {
                 throw new Error('Commodity not found or invalid data structure');
             }
     
             const result = data.chart.result[0];
     
-            // Check if indicators and quote data exist
             if (!result.indicators || !result.indicators.quote || result.indicators.quote.length === 0) {
                 throw new Error('No price data available for this commodity');
             }
@@ -64,7 +59,6 @@ const CommodityInfo = () => {
                 date: new Date(result.timestamp[result.timestamp.length - 1] * 1000).toLocaleDateString()
             });
     
-            // Prepare chart data - last 30 days
             const chartPoints = result.timestamp.map((time, index) => ({
                 x: new Date(time * 1000),
                 y: result.indicators.quote[0].close[index]
@@ -80,38 +74,22 @@ const CommodityInfo = () => {
         }
     };
 
-    const handleSearch = (event) => {
-        event.preventDefault();
-        if (searchTerm) {
-            fetchCommodityData(searchTerm.toUpperCase());
-        }
-    };
-
     return (
         <div className="commodity-container">
             <h1>Commodity Information</h1>
             
-            <div className="search-section">
-                <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Enter commodity symbol (e.g., CL=F, BZ=F, HG=F)..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                    <button type="submit" className="search-button">Search</button>
-                </form>
-                
-                <div className="available-symbols">
-                    <h3>Available Symbols:</h3>
-                    <div className="symbols-grid">
-                        {Object.entries(commoditySymbols).map(([symbol, name]) => (
-                            <div key={symbol} className="symbol-item">
-                                {symbol}: {name}
-                            </div>
-                        ))}
-                    </div>
+            <div className="available-symbols">
+                <h3>Available Commodities:</h3>
+                <div className="symbols-grid">
+                    {Object.entries(commoditySymbols).map(([symbol, name]) => (
+                        <button 
+                            key={symbol} 
+                            onClick={() => fetchCommodityData(symbol)}
+                            className="commodity-button"
+                        >
+                            {name}
+                        </button>
+                    ))}
                 </div>
             </div>
 
