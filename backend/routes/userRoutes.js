@@ -52,6 +52,7 @@ router.post('/login', async (req, res) => {
       
       // Send token and user id to the frontend
       res.json({ token, userId: user._id ,username:user.username});
+      
   } catch (error) {
       console.error('Login error:', error);
       res.status(500).json({ message: 'Internal Server Error' });

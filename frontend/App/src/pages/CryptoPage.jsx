@@ -84,15 +84,16 @@ const CryptoCurrencyInfo = () => {
             <h1 className="text-center">Cryptocurrency Information</h1>
             
             <form onSubmit={handleSearch} className="mb-4">
-                <input
-                    type="text"
-                    placeholder="Search for a cryptocurrency(ex-Bitcoin)..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-input"
-                />
-                <button type="submit" className="btn btn-primary mt-2">Search</button>
-            </form>
+  <input
+    type="text"
+    placeholder="Search for a cryptocurrency(ex-Bitcoin)..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="form-input"
+  />
+  <button type="submit" className="btn btn-secondary mt-2">Search</button>
+</form>
+
 
             {loading && <p>Loading...</p>}
             {error && <p className="text-danger">{error}</p>} 

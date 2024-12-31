@@ -1,5 +1,3 @@
-// routes/caseNotificationsRoutes.js
-
 import express from 'express';
 import CaseNotification from '../models/CaseNotification.js';
 

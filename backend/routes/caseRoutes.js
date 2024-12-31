@@ -31,6 +31,7 @@ router.post('/', async (req, res) => {
 
 // Get all cases
 router.get('/', async (req, res) => {
+    
     try {
         const cases = await Case.find()
             .populate('assignedTo', 'name email')

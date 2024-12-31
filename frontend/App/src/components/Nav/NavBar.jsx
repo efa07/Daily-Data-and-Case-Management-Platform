@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { IconButton, Badge, Menu, MenuItem, Typography } from '@mui/material';
+import { IconButton, Badge, Menu, MenuItem, Typography, Paper, Divider, Box } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import './NavBar.css';
 
 const NavBar = ({ notifications = [], onNotificationClick }) => {
@@ -10,6 +12,13 @@ const NavBar = ({ notifications = [], onNotificationClick }) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const isActive = (path) => location.pathname === path;
+
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user ? user.userId : '';
+    const username = user ? user.username : 'Guest'; 
+    const userRole = user ? user.username : ''; 
+
 
     const handleLogout = () => {
         localStorage.removeItem('user');
@@ -57,34 +66,65 @@ const NavBar = ({ notifications = [], onNotificationClick }) => {
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                         keepMounted
+                        PaperProps={{
+                            elevation: 3,
+                            sx: { 
+                                width: 300, 
+                                maxHeight: 400, 
+                                overflowY: 'auto', 
+                                borderRadius: 2 
+                            }
+                        }}
                     >
-                        {notifications.length > 0 ? (
+                        {notifications.length > 0 && userRole === "Analyst" ? (
                             notifications.map((notification) => (
-                                <MenuItem 
-                                    key={notification._id} 
+                                <MenuItem
+                                    key={notification._id}
                                     onClick={() => {
                                         onNotificationClick(notification._id);
                                         handleClose();
                                     }}
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                                        },
+                                        padding: 2,
+                                        alignItems: 'start',
+                                    }}
                                 >
-                                    <div className="notf">
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                                         <Typography variant="subtitle1" fontWeight="bold">
                                             {notification.title}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
-                                            Priority: {notification.priority}
+                                            Priority: 
+                                            {notification.priority === 'High' ? (
+                                                <PriorityHighIcon fontSize="small" color="error" sx={{ ml: 0.5 }} />
+                                            ) : (
+                                                ' Normal'
+                                            )}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
-                                            Status: {notification.status}
+                                            Status: 
+                                            {notification.status === 'Completed' ? (
+                                                <CheckCircleIcon fontSize="small" color="success" sx={{ ml: 0.5 }} />
+                                            ) : (
+                                                ` ${notification.status}`
+                                            )}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
                                             Due: {new Date(notification.dueDate).toLocaleDateString()}
                                         </Typography>
-                                    </div>
+                                    </Box>
+                                    <Divider sx={{ my: 1 }} />
                                 </MenuItem>
                             ))
                         ) : (
-                            <MenuItem onClick={handleClose}>No new notifications</MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center' }}>
+                                    No new notifications
+                                </Typography>
+                            </MenuItem>
                         )}
                     </Menu>
                 </li>

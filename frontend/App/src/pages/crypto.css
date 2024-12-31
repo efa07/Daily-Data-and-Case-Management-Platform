@@ -40,7 +40,11 @@
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 50%;
+  margin: 0 auto; /* Centers the button */
+  display: block; /* Ensures the button behaves as a block element */
 }
+
 
 .btn-primary {
   background: #6c5ce7;
@@ -172,6 +176,12 @@
 /* Utility Classes */
 .mb-4 {
   margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 2;
+  
+
 }
 
 .mt-2 {

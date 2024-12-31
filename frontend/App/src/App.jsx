@@ -16,6 +16,7 @@ import CaseManagement from './pages/CaseManagement';
 import Signup from "./pages/Singup";
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import "./app.css";
+import "./index.css"
 
 function App() {
   const location = useLocation();

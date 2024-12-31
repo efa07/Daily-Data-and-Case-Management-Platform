@@ -4,7 +4,6 @@ import { Grid, Box } from '@mui/material';
 import './UserDashboard.css';
 import BitcoinChart from "../Service/Bitcoin";
 import CoffeeChart from '../Service/CoffeeChart';
-import MarketAlertForm from '../../pages/MarketAlertForm';
 import NotificationsList from '../../pages/NotificationsList';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -16,6 +15,7 @@ const UserDashboard = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const userId = user ? user.userId : '';
   const username = user ? user.username : 'Guest'; 
+  const userRole = user ? user.username : ''; 
 
   const marketData = {
     stocks: { total: 5000, change: '+2%' },
@@ -34,20 +34,29 @@ const UserDashboard = () => {
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/cases');
-        
+        const token = localStorage.getItem('token'); 
+        const response = await fetch('http://localhost:5000/api/cases', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+  
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+  
         const data = await response.json();
         setCases(data);
       } catch (error) {
         console.error('Error fetching cases:', error);
       }
     };
-
+  
     fetchCases();
   }, []);
+  
 
   const handleSearch = () => {
     const filteredAssets = marketData.filter(asset =>
@@ -63,7 +72,6 @@ const UserDashboard = () => {
 
   return (
     <div className="user-dashboard">
-      
       <h1>Welcome, {username}!</h1>
       <div className="search-bar">
         <input
@@ -97,37 +105,39 @@ const UserDashboard = () => {
         </Grid>
       </div>
 
-      <div className="case-overview">
-        <h2 className='mh2'>Case Overview</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Case ID</th>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Priority</th>
-              <th>Created On</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cases.map((caseItem) => (
-              <tr key={caseItem._id}>
-                <td>{caseItem._id}</td>
-                <td>{caseItem.title}</td>
-                <td>{caseItem.status}</td>
-                <td>{caseItem.priority}</td>
-                <td>{new Date(caseItem.createdAt).toLocaleDateString()}</td>
+      {userRole === 'Analyst' && ( // Conditionally render the Case Overview section
+        <div className="case-overview">
+          <h2 className='mh2'>Case Overview</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Created On</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {cases.map((caseItem) => (
+                <tr key={caseItem._id}>
+                  <td>{caseItem._id}</td>
+                  <td>{caseItem.title}</td>
+                  <td>{caseItem.status}</td>
+                  <td>{caseItem.priority}</td>
+                  <td>{new Date(caseItem.createdAt).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className='not'>
-            <h1>Notification System</h1>
-            <NotificationsList userId={userId} />
-        </div>
-        <ToastContainer position='bottom'/>
+        <h1>Notification System</h1>
+        <NotificationsList userId={userId} />
+      </div>
+      <ToastContainer position='bottom' />
     </div>
   );
 };
