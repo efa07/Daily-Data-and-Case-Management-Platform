@@ -19,6 +19,8 @@ const CaseManagement = () => {
   const [editMode, setEditMode] = useState(false);
   const [currentCaseId, setCurrentCaseId] = useState(null);
   const [userRole, setUserRole] = useState('');
+  const user = JSON.parse(localStorage.getItem('user'));
+  const username = user ? user.username : 'Guest'; 
 
   // Toast notification functions
   const notifySuccess = (message) => {
@@ -115,26 +117,32 @@ const CaseManagement = () => {
 
       {/* Case List */}
       <div className="case-list">
-        {cases.length > 0 ? (
-          cases.map((caseItem) => (
-            <div key={caseItem._id} className="case-item">
-              <h4>{caseItem.title}</h4>
-              <p>Description: {caseItem.description}</p>
-              <p>Priority: {caseItem.priority}</p>
-              <p>Status: {caseItem.status}</p>
-              <p>Assigned To: {caseItem.assignedTo ? caseItem.assignedTo.email : 'N/A'}</p>
-              <p>Due Date: {caseItem.dueDate ? new Date(caseItem.dueDate).toLocaleDateString() : 'N/A'}</p>
-              <button onClick={() => handleEdit(caseItem)} className="edit">Edit</button>
-              <button onClick={() => handleDelete(caseItem._id)} className="delete">Delete</button>
-            </div>
-          ))
-        ) : (
-          <p>No cases found.</p>
-        )}
+  {cases.length > 0 ? (
+    cases.map((caseItem) => (
+      <div key={caseItem._id} className="case-card">
+        <div className="case-card-header">
+          <h4>{caseItem.title}</h4>
+          <div className="case-card-actions">
+            <button onClick={() => handleEdit(caseItem)} className="edit">Edit</button>
+            <button onClick={() => handleDelete(caseItem._id)} className="delete">Delete</button>
+          </div>
+        </div>
+        <div className="case-card-body">
+          <p><strong>Description:</strong> {caseItem.description}</p>
+          <p><strong>Priority:</strong> <span className={`priority-${caseItem.priority.toLowerCase()}`}>{caseItem.priority}</span></p>
+          <p><strong>Status:</strong> <span className={`status-${caseItem.status.toLowerCase().replace(' ', '-')}`}>{caseItem.status}</span></p>
+          <p><strong>Created by:</strong> {username ? username : 'Guest'}</p>
+          <p><strong>Due Date:</strong> {caseItem.dueDate ? new Date(caseItem.dueDate).toLocaleDateString() : 'N/A'}</p>
+        </div>
       </div>
+    ))
+  ) : (
+    <p className="no-cases">No cases found.</p>
+  )}
+</div>
 
       {/* Case Form */}
-      {userRole === 'analyst' && (
+      {/* {userRole === 'analyst' && ( */}
         <div className="case-form">
           <h3>{editMode ? 'Edit Case' : 'Add New Case'}</h3>
           <form onSubmit={handleSubmit}>
@@ -155,7 +163,7 @@ const CaseManagement = () => {
             {editMode && <button type="button" onClick={() => setEditMode(false)}>Cancel</button>}
           </form>
         </div>
-      )}
+      
       <ToastContainer
   position="top-right"
   autoClose={5000}

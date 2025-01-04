@@ -1,189 +1,176 @@
 /* crypto.css */
-.container {
-  max-width: 1200px;
-  margin: 50px auto;
-  padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+/* General Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
 
-.text-center {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
   text-align: center;
-  color: #1a1a1a;
+  color: #2c3e50;
   font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #34495e;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+p {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin: 5px 0;
+}
+
+/* Search Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .form-input {
-  width: 100%;
-  padding: 1rem;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.form-control:focus {
+.form-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
   outline: none;
-  border-color: #6c5ce7;
-  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+.form-select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  outline: none;
 }
 
 .btn {
-  display: inline-block;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 50%;
-  margin: 0 auto; /* Centers the button */
-  display: block; /* Ensures the button behaves as a block element */
-}
-
-
-.btn-primary {
-  background: #6c5ce7;
+  padding: 12px 20px;
+  background-color: #3498db;
   color: white;
-  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.btn-primary:hover {
-  background: #5b4bc4;
+.btn:hover {
+  background-color: #2980b9;
   transform: translateY(-2px);
 }
 
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Loading and Error Messages */
+.loading, .text-danger {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+.loading {
+  background-color: #f1c40f;
+  color: #fff;
+}
+
+.text-danger {
+  background-color: #e74c3c;
+  color: #fff;
+}
+.loader{
+  margin-left: 50%;
+  margin-top: 10px;
+}
+/* Coin Data Card */
 .card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
+  background-color: #ecf0f1;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .card-body {
-  padding: 2rem;
-}
-
-.card h2 {
-  color: #1a1a1a;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-}
-
-.card p {
-  color: #4a4a4a;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
 }
 
+/* Chart Container */
 .chart-container {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  margin-top: 2rem;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.text-danger {
-  color: #ff6b6b;
-  text-align: center;
-  padding: 1rem;
-  background: #fff5f5;
-  border-radius: 12px;
-  margin: 1rem 0;
-}
-
-/* Loading animation */
-@keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
-}
-
-.loading {
-  text-align: center;
-  color: #6c5ce7;
-  font-size: 1.2rem;
-  animation: pulse 1.5s infinite;
+.chart-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    padding: 1rem;
+      padding: 15px;
   }
 
-  .text-center {
-    font-size: 2rem;
+  h1 {
+      font-size: 2rem;
   }
 
-  .card-body {
-    padding: 1.5rem;
+  h2 {
+      font-size: 1.5rem;
   }
 
-  .chart-container {
-    padding: 1rem;
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #1a1a1a;
-  }
-
-  .container {
-    color: #e0e0e0;
-  }
-
-  .text-center {
-    color: #333;
-  }
-
-  .form-control {
-    background: #2d2d2d;
-    border-color: #3d3d3d;
-    color: #ffffff;
+  .form-input, .form-select, .btn {
+      font-size: 0.9rem;
   }
 
   .card {
-    background: #2d2d2d;
+      padding: 15px;
   }
-
-  .card h2 {
-    color: #ffffff;
-  }
-
-  .card p {
-    color: #e0e0e0;
-  }
-
-  .chart-container {
-    background: #2d2d2d;
-  }
-}
-
-/* Utility Classes */
-.mb-4 {
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 2;
-  
-
-}
-
-.mt-2 {
-  margin-top: 0.8rem;
 }

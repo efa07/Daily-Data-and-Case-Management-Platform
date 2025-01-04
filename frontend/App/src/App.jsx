@@ -15,8 +15,9 @@ import FinancialInfo from "./pages/Financialinfo";
 import CaseManagement from './pages/CaseManagement';
 import Signup from "./pages/Singup";
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import CaseOverviewPage from './pages/CaseOverviewPage';
+
 import "./app.css";
-import "./index.css"
 
 function App() {
   const location = useLocation();
@@ -27,9 +28,11 @@ function App() {
   const isNotFoundRoute = location.pathname === '*' || !([
     '/', '/about', '/contact', '/case', '/stock', 
     '/financialchart', '/crypto', '/commodities',
-    '/login', '/signup'
+    '/login', '/signup','/casepage'
   ].includes(location.pathname));
   
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userRole = user ? user.username : ''; 
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -46,27 +49,27 @@ function App() {
     }
   }, [location.pathname, token, navigate]);
 
-useEffect(() => {
-  const fetchCases = async () => {
-    try {
-      const { data } = await axios.get('http://localhost:5000/api/cases');
-      setNotifications(data);
-    } catch (error) {
-      console.error("Error fetching cases:", error);
+  useEffect(() => {
+    const fetchCases = async () => {
+      try {
+        const { data } = await axios.get('http://localhost:5000/api/cases');
+        setNotifications(data);
+      } catch (error) {
+        console.error("Error fetching cases:", error);
+      }
     }
+    fetchCases();
+  }, []);
+
+  const handleNotificationClick = (id) => {
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter(notification => notification.id !== id)
+    );
+    navigate('/case'); 
   }
-  fetchCases();
-}
-, []);
-const handleNotificationClick = (id) => {
-  setNotifications((prevNotifications) =>
-    prevNotifications.filter(notification => notification.id !== id)
-  );
-  navigate('/case'); 
-}
+
   return (
     <div className="App" style={{ display: 'flex' }}>
-      {/* Sidebar */}
       {!shouldHideNav && (
         <div className="sidebar">
           <div className="sidebar-toggle">
@@ -74,7 +77,7 @@ const handleNotificationClick = (id) => {
               style={{
                 background: 'none',
                 border: 'none',
-                color: 'white',
+                color: 'black',
                 cursor: 'pointer',
                 fontSize: '1.5rem',
               }}>
@@ -83,92 +86,183 @@ const handleNotificationClick = (id) => {
           </div>
           
           <div className="sidebar-links">
-            <a href="/" style={linkStyle}>Dashboard</a>
-            <a href="/crypto" style={linkStyle}>Crypto</a>
-            <a href="/commodities" style={linkStyle}>Commodities</a>
-            <a href="/financialchart" style={linkStyle}>Financial Chart</a>
-            <a href='/case' style={linkStyle}>Case Management</a>
+            <a
+              href="/"
+              style={linkStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = hoverStyle.backgroundColor;
+                e.currentTarget.style.borderColor = hoverStyle.borderColor;
+                e.currentTarget.style.transform = hoverStyle.transform;
+                e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = linkStyle.backgroundColor;
+                e.currentTarget.style.borderColor = linkStyle.borderColor;
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = linkStyle.boxShadow;
+              }}
+            >
+              Dashboard
+            </a>
+            <a
+              href="/crypto"
+              style={linkStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = hoverStyle.backgroundColor;
+                e.currentTarget.style.borderColor = hoverStyle.borderColor;
+                e.currentTarget.style.transform = hoverStyle.transform;
+                e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = linkStyle.backgroundColor;
+                e.currentTarget.style.borderColor = linkStyle.borderColor;
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = linkStyle.boxShadow;
+              }}
+            >
+              Crypto
+            </a>
+            <a
+              href="/commodities"
+              style={linkStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = hoverStyle.backgroundColor;
+                e.currentTarget.style.borderColor = hoverStyle.borderColor;
+                e.currentTarget.style.transform = hoverStyle.transform;
+                e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = linkStyle.backgroundColor;
+                e.currentTarget.style.borderColor = linkStyle.borderColor;
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = linkStyle.boxShadow;
+              }}
+            >
+              Commodities
+            </a>
+            <a
+              href="/financialchart"
+              style={linkStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = hoverStyle.backgroundColor;
+                e.currentTarget.style.borderColor = hoverStyle.borderColor;
+                e.currentTarget.style.transform = hoverStyle.transform;
+                e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = linkStyle.backgroundColor;
+                e.currentTarget.style.borderColor = linkStyle.borderColor;
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = linkStyle.boxShadow;
+              }}
+            >
+              Financial Chart
+            </a>
+            <a
+              href="/case"
+              style={linkStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = hoverStyle.backgroundColor;
+                e.currentTarget.style.borderColor = hoverStyle.borderColor;
+                e.currentTarget.style.transform = hoverStyle.transform;
+                e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = linkStyle.backgroundColor;
+                e.currentTarget.style.borderColor = linkStyle.borderColor;
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = linkStyle.boxShadow;
+              }}
+            >
+              Case Management
+            </a>
           </div>
         </div>
       )}
 
-      {/* Main Content */}
       <div style={{ 
         marginLeft: shouldHideNav ? '0' : '60px',
         flex: 1,
         transition: 'all 0.3s ease',
         width: '100vw',
       }}>
-        
-        {/* Only render NavBar if not on auth routes or unknown routes */}
         {!shouldHideNav && <NavBar
           notifications={notifications}
           onNotificationClick={handleNotificationClick} 
-        />
-      }
+        />}
       
-          <Routes>
-            <Route path='login' element={<Login />} />
-            <Route path='signup' element={<Signup />} />
-            <Route element={<ProtectedRoute />}>
+        <Routes>
+          <Route path='login' element={<Login />} />
+          <Route path='signup' element={<Signup />} />
+          <Route element={<ProtectedRoute />}>
             <Route path='/' element={<UserDashboard />} />
-              <Route path='about' element={
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <LazyAbout />
-                </React.Suspense>
-              } />
-              <Route path='contact' element={
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <LazyContact />
-                </React.Suspense>
-              } />
-              <Route path='case' element={
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <CaseManagement />
-                </React.Suspense>
-              } />
-              <Route path='stock' element={
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <CoffeeChart />
-                </React.Suspense>
-              } />
-              <Route path='financialchart' element={
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <FinancialInfo />
-                </React.Suspense>
-              } />
-              <Route path='crypto' element={
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <CryptoCurrencyInfo />
-                </React.Suspense>
-              } />
-              <Route path='commodities' element={
-                <React.Suspense fallback={<div>Loading...</div>}>
-                  <CommodityInfo />
-                </React.Suspense>
-              } />
-              
-            </Route>
-            
-            <Route path='*' element={
+            <Route path='about' element={
               <React.Suspense fallback={<div>Loading...</div>}>
-                <LazyNotFound />
+                <LazyAbout />
               </React.Suspense>
             } />
-          </Routes>
-
-        </div>
+            <Route path='contact' element={
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <LazyContact />
+              </React.Suspense>
+            } />
+            <Route path='case' element={
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <CaseManagement />
+              </React.Suspense>
+            } />
+            <Route path='stock' element={
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <CoffeeChart />
+              </React.Suspense>
+            } />
+            <Route path='financialchart' element={
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <FinancialInfo />
+              </React.Suspense>
+            } />
+            <Route path='crypto' element={
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <CryptoCurrencyInfo />
+              </React.Suspense>
+            } />
+            <Route path='commodities' element={
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <CommodityInfo />
+              </React.Suspense>
+            } />
+          </Route>
+          <Route path='*' element={
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <LazyNotFound />
+            </React.Suspense>
+          } />
+        </Routes>
       </div>
+    </div>
   );
 }
-
 const linkStyle = {
-  color: 'white',
+  color: '#ffffff',
   textDecoration: 'none',
-  padding: '0.8rem',
-  fontSize: '1.3rem',
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
+  padding: '0.8rem 1.2rem',
+  fontSize: '1rem',
+  borderRadius: '8px',
+  transition: 'all 0.3s ease',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.8rem',
+  backgroundColor: '#6c5ce7',
+  border: '2px solid #6c5ce7',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 };
+
+const hoverStyle = {
+  backgroundColor: '#5a4dbf',
+  borderColor: '#5a4dbf',
+  transform: 'translateY(-2px)',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+};
+
 
 export default App;

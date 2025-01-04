@@ -21,7 +21,8 @@ import caseNotificationsRoutes from './routes/caseNotificationsRoutes.js';
 import helmet from "helmet";
 import rateLimit from "express-rate-limit"
 import checkAnalystRole from "./middleware/isAnalytics.js"
-
+import comment from './routes/comment.js';
+import bodyparser from 'body-parser';
 
 // Load environment variables
 dotenv.config();
@@ -62,6 +63,7 @@ connectDB();
 app.use(cors({corsOptions}));
 app.use(express.json());
 app.use('/api/cases', caseRoutes,limiter);
+app.use('/api/comment',comment,limiter);
 app.use('/api/users', userRoutes,limiter);
 app.use('/api/notifications', notificationRoutes,limiter);
 app.use('/api/market-alerts', marketAlertsRoutes,limiter);

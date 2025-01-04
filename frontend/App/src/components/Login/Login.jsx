@@ -40,37 +40,38 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-box">
-                <h2>DDCM Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit" disabled={loading}>
-                        {loading ? 'Logging in...' : 'Login'}
-                    </button>
-                </form>
-                <ToastContainer />
-            </div>
+        
+<div className='locon'>
+        <div className="login-container cc">
+        <div className="login-box card2">
+        <h2>DDCM Login</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="ltextbox">
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email"
+                        required
+                    />
+                </div>
+                <div className="ltextbox">
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        required
+                    />
+                </div>
+                <button type="submit" className="btn" disabled={loading}>
+                    {loading ? 'Loading...' : 'Login'}
+                </button>
+            </form>
         </div>
+        <img src='../../../public/logo.jpg' className='loginlogo'/>
+    </div>
+    </div>
     );
 };
 

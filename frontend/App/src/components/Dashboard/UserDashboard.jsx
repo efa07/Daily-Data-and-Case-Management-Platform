@@ -57,7 +57,6 @@ const UserDashboard = () => {
     fetchCases();
   }, []);
   
-
   const handleSearch = () => {
     const filteredAssets = marketData.filter(asset =>
       asset.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -106,7 +105,10 @@ const UserDashboard = () => {
       </div>
 
       {userRole === 'Analyst' && ( // Conditionally render the Case Overview section
-        <div className="case-overview">
+        <div className="case-overview"
+        onClick={() => window.location.href = '/casepage'}
+        style={{ cursor: 'pointer' }}
+        >
           <h2 className='mh2'>Case Overview</h2>
           <table>
             <thead>
@@ -134,7 +136,7 @@ const UserDashboard = () => {
       )}
 
       <div className='not'>
-        <h1>Notification System</h1>
+        <h1>Notification</h1>
         <NotificationsList userId={userId} />
       </div>
       <ToastContainer position='bottom' />

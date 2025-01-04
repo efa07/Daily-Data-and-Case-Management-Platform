@@ -1,21 +1,23 @@
+/* Sidebar.css - Light Theme */
+
 .sidebar {
   width: 60px;
   height: 100vh;
-  border-right: 2px solid #6c5ce7;
-  background-color: #222;
+  border-right: 2px solid #6c5ce7; /* Purple border */
+  background-color: #ffffff; /* White background */
   transition: width 0.3s ease;
   position: fixed;
   margin-top: 70px;
   left: 0;
   top: 0;
-  color: white;
+  color: #333; /* Dark text */
   padding: 1rem;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
 .sidebar:hover {
-  width: 250px; 
+  width: 250px; /* Expanded width on hover */
 }
 
 .sidebar-toggle {
@@ -33,26 +35,26 @@
 .sidebar-links a {
   padding: 0.8rem;
   font-size: 1.3rem;
-  color: white;
+  color: #333; /* Dark text for visibility */
   text-decoration: none;
   border-radius: 4px;
-  opacity: 0; 
-  visibility: hidden; 
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 0; /* Initially hidden */
+  visibility: hidden; /* Initially hidden */
+  transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
 }
 
 .sidebar:hover .sidebar-links a {
-  opacity: 1; 
-  visibility: visible; 
-  
+  opacity: 1; /* Visible on hover */
+  visibility: visible; /* Visible on hover */
 }
+
 .sidebar:hover .sidebar-toggle button {
-  opacity: 0; 
-  visibility: hidden; 
+  opacity: 0; /* Hide toggle button on hover */
+  visibility: hidden; /* Hide toggle button on hover */
 }
 
 .sidebar-links a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(108, 92, 231, 0.1); /* Light purple hover background */
   animation: arrowBounce 60s ease-in-out infinite;
 }
 
@@ -66,5 +68,6 @@
 }
 
 .sidebar-toggle button {
-  animation: arrowBounce 1s ease-in-out infinite; 
+  animation: arrowBounce 1s ease-in-out infinite;
+  color: #333; /* Dark icon */
 }

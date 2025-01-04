@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,CSSProperties } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import MarketAlertForm from './MarketAlertForm';
+import SyncLoader from "react-spinners/SyncLoader";
+
 import 'chartjs-adapter-date-fns';
 import {
     Chart as ChartJS,
@@ -15,6 +17,12 @@ import {
 } from 'chart.js';
 import "./crypto.css"
 
+// const override: CSSProperties = {
+//     display: "block",
+//     margin: "0 auto",
+//     borderColor: "red",
+//   };
+
 // register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, TimeScale);
 
@@ -24,6 +32,8 @@ const CryptoCurrencyInfo = () => {
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [days, setDays] = useState('1'); // State for days
+  let [color, setColor] = useState("#ffffff");
     const userId  = "123"
 
     const fetchCoinData = async (coin) => {
@@ -58,7 +68,7 @@ const CryptoCurrencyInfo = () => {
             const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart`, {
                 params: {
                     vs_currency: 'usd',
-                    days: '30', // Last 30 days data
+                    days: days, // Use the state variable
                 },
             });
             const prices = data.prices.map(price => ({
@@ -84,18 +94,32 @@ const CryptoCurrencyInfo = () => {
             <h1 className="text-center">Cryptocurrency Information</h1>
             
             <form onSubmit={handleSearch} className="mb-4">
-  <input
-    type="text"
-    placeholder="Search for a cryptocurrency(ex-Bitcoin)..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className="form-input"
-  />
-  <button type="submit" className="btn btn-secondary mt-2">Search</button>
-</form>
+                <input
+                    type="text"
+                    placeholder="Search for a cryptocurrency(ex-Bitcoin)..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-input"
+                />
+                <select
+                    value={days}
+                    onChange={(e) => setDays(e.target.value)}
+                    className="form-select mt-2"
+                >
+                    <option value="1">1 Day</option>
+                    <option value="7">7 Days</option>
+                    <option value="30">30 Days</option>
+                    <option value="90">90 Days</option>
+                    <option value="365">1 Year</option>
+                </select>
+                <button type="submit" className="btn btn-secondary mt-2">Search</button>
+            </form>
 
-
-            {loading && <p>Loading...</p>}
+            {loading && <div className='loader' ><SyncLoader
+  color="#6c5ce7"
+  margin={5}
+  size={25}
+/> </div>}
             {error && <p className="text-danger">{error}</p>} 
             {coinData && !loading && (
                 <div className="card mb-4">
@@ -118,8 +142,8 @@ const CryptoCurrencyInfo = () => {
                                 borderColor: 'rgba(75,192,192,1)',
                                 tension: 0.1,
                                 pointRadius: 0,
-                             fill: true,
-                            borderWidth: 2,
+                                fill: true,
+                                borderWidth: 2,
                             }],
                         }}
                         options={{
@@ -150,7 +174,7 @@ const CryptoCurrencyInfo = () => {
                 </div>
             )}
 
-<MarketAlertForm userId={userId} />
+            <MarketAlertForm userId={userId} />
         </div>
     );
 };
