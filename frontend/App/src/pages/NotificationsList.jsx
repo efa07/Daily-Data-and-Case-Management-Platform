@@ -3,8 +3,8 @@ import NotificationItem from './NotificationItem';
 
 const NotificationsList = ({ userId }) => {
     const [notifications, setNotifications] = useState([]);
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(null); 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchNotifications = async () => {

@@ -34,7 +34,7 @@ const ExchangeRateChart = () => {
   };
 
   return (
-    <div style={{ width: '100%',height: "260px" }}>
+    <div style={{ width: '100%',height: "320px" }}>
       <h2 style={{color:"#333"}}>EUR to USD Exchange Rate</h2>
       <Line data={chartData} />
     </div>

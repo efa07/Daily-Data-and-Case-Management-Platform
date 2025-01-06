@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-date-fns';
+import MarketAlertForm from './MarketAlertForm';
+import SyncLoader from "react-spinners/SyncLoader";
+
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -21,6 +24,8 @@ const FinancialInfo = () => {
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user.userId
 
     const stockSymbols = {
         'AAPL': 'Apple',
@@ -90,8 +95,11 @@ const FinancialInfo = () => {
                 </div>
             </div>
 
-            {loading && <div className="loading">Loading...</div>}
-            {error && <div className="error">{error}</div>}
+            {loading && <div className='loader' ><SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            /> </div>}            {error && <div className="error">{error}</div>}
 
             {financialData && !loading && (
                 <div className="financial-card">
@@ -161,6 +169,8 @@ const FinancialInfo = () => {
                     />
                 </div>
             )}
+            <MarketAlertForm userId={userId} />
+
         </div>
     );
 };

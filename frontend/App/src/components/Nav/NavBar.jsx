@@ -38,7 +38,7 @@ const NavBar = ({ notifications = [], onNotificationClick }) => {
 
     return (
         <nav className="navbar">
-            <div className="navbar-logo">
+            <div className="navbar-logo ">
                 <Link to="/" className={isActive('/') ? 'active-link' : 'nav-link'}>DDCM</Link>
             </div>
             <ul className="navbar-links">
@@ -57,7 +57,7 @@ const NavBar = ({ notifications = [], onNotificationClick }) => {
                         onClick={handleBellClick}
                         aria-label="notifications"
                     >
-                        <Badge badgeContent={unreadCount} color="secondary">
+                        <Badge badgeContent={unreadCount} color="info">
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>

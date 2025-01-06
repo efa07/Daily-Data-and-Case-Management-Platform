@@ -16,6 +16,7 @@ import CaseManagement from './pages/CaseManagement';
 import Signup from "./pages/Singup";
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import CaseOverviewPage from './pages/CaseOverviewPage';
+import SyncLoader from "react-spinners/SyncLoader";
 
 import "./app.css";
 
@@ -26,18 +27,18 @@ function App() {
   const [animateArrow, setAnimateArrow] = useState(true);
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
   const isNotFoundRoute = location.pathname === '*' || !([
-    '/', '/about', '/contact', '/case', '/stock', 
+    '/', '/about', '/contact', '/case', '/stock',
     '/financialchart', '/crypto', '/commodities',
-    '/login', '/signup','/casepage'
+    '/login', '/signup', '/casepage'
   ].includes(location.pathname));
-  
+
   const user = JSON.parse(localStorage.getItem('user'));
-  const userRole = user ? user.username : ''; 
+  const userRole = user ? user.username : '';
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimateArrow(false);
-    }, 3000); 
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
   const shouldHideNav = isAuthRoute || isNotFoundRoute;
@@ -65,7 +66,7 @@ function App() {
     setNotifications((prevNotifications) =>
       prevNotifications.filter(notification => notification.id !== id)
     );
-    navigate('/case'); 
+    navigate('/case');
   }
 
   return (
@@ -73,7 +74,7 @@ function App() {
       {!shouldHideNav && (
         <div className="sidebar">
           <div className="sidebar-toggle">
-            <button 
+            <button
               style={{
                 background: 'none',
                 border: 'none',
@@ -81,10 +82,10 @@ function App() {
                 cursor: 'pointer',
                 fontSize: '1.5rem',
               }}>
-              {'←'} 
+              {'←'}
             </button>
           </div>
-          
+
           <div className="sidebar-links">
             <a
               href="/"
@@ -180,7 +181,7 @@ function App() {
         </div>
       )}
 
-      <div style={{ 
+      <div style={{
         marginLeft: shouldHideNav ? '0' : '60px',
         flex: 1,
         transition: 'all 0.3s ease',
@@ -188,52 +189,85 @@ function App() {
       }}>
         {!shouldHideNav && <NavBar
           notifications={notifications}
-          onNotificationClick={handleNotificationClick} 
+          onNotificationClick={handleNotificationClick}
         />}
-      
+
         <Routes>
           <Route path='login' element={<Login />} />
           <Route path='signup' element={<Signup />} />
+          <Route path='casepage' element={<CaseOverviewPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path='/' element={<UserDashboard />} />
             <Route path='about' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
+              <React.Suspense fallback={<SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            />}>
                 <LazyAbout />
               </React.Suspense>
             } />
             <Route path='contact' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
+              <React.Suspense fallback={<SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            />}>
                 <LazyContact />
               </React.Suspense>
             } />
             <Route path='case' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
+              <React.Suspense fallback={<SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            />}>
                 <CaseManagement />
               </React.Suspense>
             } />
             <Route path='stock' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
+              <React.Suspense fallback={<SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            />}>
                 <CoffeeChart />
               </React.Suspense>
             } />
             <Route path='financialchart' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
+              <React.Suspense fallback={<SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            />}>
                 <FinancialInfo />
               </React.Suspense>
             } />
             <Route path='crypto' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
+              <React.Suspense fallback={<SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            />}>
                 <CryptoCurrencyInfo />
               </React.Suspense>
             } />
             <Route path='commodities' element={
-              <React.Suspense fallback={<div>Loading...</div>}>
+              <React.Suspense fallback={<SyncLoader
+                color="#6c5ce7"
+                margin={5}
+                size={25}
+            />}>
                 <CommodityInfo />
               </React.Suspense>
             } />
           </Route>
           <Route path='*' element={
-            <React.Suspense fallback={<div>Loading...</div>}>
+            <React.Suspense fallback={<SyncLoader
+              color="#6c5ce7"
+              margin={5}
+              size={25}
+          />}>
               <LazyNotFound />
             </React.Suspense>
           } />

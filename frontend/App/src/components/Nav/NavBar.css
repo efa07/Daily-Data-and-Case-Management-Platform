@@ -18,15 +18,27 @@
 /* Logo styles */
 .navbar-logo .active-link {
     font-size: 1.5rem;
+    padding: 0.3em;
     font-weight: bold;
     color: #333; /* Dark text */
     text-decoration: none;
+    border-top: 3px solid #ff4081;
+    border-left: 1px solid #ff4081;
+    border-bottom: 1px solid #ff4081;
+    border-right:6px solid #ff4081;
+    box-shadow: -10px 8px 1px #333;
     transition: color 0.3s ease;
 }
 
 .navbar-logo .nav-link {
     font-size: 1.5rem;
+    padding: 0.3em;
     font-weight: bold;
+    border-top: 3px solid #ff4081;
+    border-left: 1px solid #ff4081;
+    border-bottom: 1px solid #ff4081;
+    border-right:6px solid #ff4081;
+    box-shadow: -10px 8px 1px #333;
     color: #333; /* Dark text */
     text-decoration: none;
     transition: color 0.3s ease;

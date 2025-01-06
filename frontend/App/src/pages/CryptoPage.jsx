@@ -34,8 +34,10 @@ const CryptoCurrencyInfo = () => {
     const [error, setError] = useState(null);
     const [days, setDays] = useState('1'); // State for days
   let [color, setColor] = useState("#ffffff");
-    const userId  = "123"
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user.userId
 
+  
     const fetchCoinData = async (coin) => {
         setLoading(true);
         setError(null); 

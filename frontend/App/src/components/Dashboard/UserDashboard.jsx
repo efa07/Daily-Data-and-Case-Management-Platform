@@ -6,6 +6,7 @@ import BitcoinChart from "../Service/Bitcoin";
 import CoffeeChart from '../Service/CoffeeChart';
 import NotificationsList from '../../pages/NotificationsList';
 import { toast, ToastContainer } from 'react-toastify';
+import UserMarketAlerts from '../marketAlet/marketAlert';
 
 const UserDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -85,6 +86,7 @@ const UserDashboard = () => {
       <div className="market-overview">
         <h2 className='mh2'>Market Overview</h2>
         <Grid container spacing={2}>
+
           <Grid item xs={12} sm={4}>
             <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
               <FinancialChart />
@@ -96,11 +98,13 @@ const UserDashboard = () => {
               <CoffeeChart />
             </Box>
           </Grid>
+
           <Grid item xs={12} sm={4}>
             <Box className="grid-item" padding={2} border={1} borderRadius={1} borderColor="grey.300">
               <BitcoinChart />
             </Box>
           </Grid>
+
         </Grid>
       </div>
 
@@ -135,10 +139,17 @@ const UserDashboard = () => {
         </div>
       )}
 
+      <div className="user-market-alerts">
+        <h2>Market Alerts for User: {username}</h2>
+        <UserMarketAlerts userId={userId} />
+      </div>
+
       <div className='not'>
-        <h1>Notification</h1>
+        <h1>Market Notification</h1>
         <NotificationsList userId={userId} />
       </div>
+
+
       <ToastContainer position='bottom' />
     </div>
   );

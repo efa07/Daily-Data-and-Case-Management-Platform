@@ -142,7 +142,7 @@ const CaseManagement = () => {
 </div>
 
       {/* Case Form */}
-      {/* {userRole === 'analyst' && ( */}
+      {/* {userRole === 'Analyst' && ( */}
         <div className="case-form">
           <h3>{editMode ? 'Edit Case' : 'Add New Case'}</h3>
           <form onSubmit={handleSubmit}>
